@@ -4,7 +4,8 @@
         {
             int a=10;
             int b=20;
-            int c= a + b;
-            Console.WriteLine($"Se fai {a}+{b}, il risultato è {c}"); //$ è l'interpolazione di stringhe
+            decimal c= 1.5m;
+            decimal d =a+b+c;
+            Console.WriteLine($"Se fai {a} + {b} (due interi) + {c} (un decimale), il risultato è {d}"); //$ è l'interpolazione di stringhe
         }
     }
