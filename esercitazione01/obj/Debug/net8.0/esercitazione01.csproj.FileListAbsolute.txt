@@ -1,0 +1,15 @@
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\bin\Debug\net8.0\esercitazione01.exe
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\bin\Debug\net8.0\esercitazione01.deps.json
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\bin\Debug\net8.0\esercitazione01.runtimeconfig.json
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\bin\Debug\net8.0\esercitazione01.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\bin\Debug\net8.0\esercitazione01.pdb
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.AssemblyInfoInputs.cache
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.AssemblyInfo.cs
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.csproj.CoreCompileInputs.cache
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.sourcelink.json
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\refint\esercitazione01.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.pdb
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.genruntimeconfig.cache
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\ref\esercitazione01.dll
