@@ -2,8 +2,7 @@
     {
         static void Main(string[] args)
         {
-            string nome = "Christian";
-            Console.WriteLine($"Ciao {nome}"); //$ è l'interpolazione di stringhe
-            Console.WriteLine("Ciao "+nome); //concatenzaione classica
+            decimal altezza = 1.80m;
+            Console.WriteLine($"Sei alto {altezza} metri"); //$ è l'interpolazione di stringhe
         }
     }
