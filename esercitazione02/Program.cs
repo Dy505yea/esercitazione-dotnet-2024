@@ -2,9 +2,9 @@
     {
         static void Main(string[] args)
         {
-            DateTime DataDiNascita = new DateTime(1980, 1, 1);
-            Console.WriteLine($"Sei nato il {DataDiNascita.ToLongDateString()}"); //$ è l'interpolazione di stringhe
-            //durante la scrittura, da quando uno mette il ".", li libreria proverà a suggerire un metodo già esistente
-            //se provi a scrivere senza digitare il ".", non va più
+            int a=10;
+            int b=20;
+            int c= a + b;
+            Console.WriteLine($"Se fai {a}+{b}, il risultato è {c}"); //$ è l'interpolazione di stringhe
         }
     }
