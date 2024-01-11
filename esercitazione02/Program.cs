@@ -2,13 +2,11 @@
     {
         static void Main(string[] args)
         {
-            string[] nomi= new string[3];   //string è di per sé un array di stringhe, ma un array dinamico
-            //dal momento che si aggiunge [] subito accanto al tipo, rendendolo un array di array
-            //ma, a differenza di string, questo array è predeterminato, quindi necessità di sapere quanto spazio deve essere creato
+            string[] nomi= new string[3];
             nomi[0]="Mario";
             nomi[1]="Luigi";
             nomi[2]="Giovanni";
             Console.WriteLine($"Buonaseeeeera   {nomi[0]}, {nomi[1]}, {nomi[2]}"); //$ è l'interpolazione di stringhe
-            Console.WriteLine($"Siete solo in {nomi.Length}?");
+            Console.WriteLine($"Siete solo in {nomi.Length}?"); //il .Length accanto al nome dell'array, indica quanti elementi son contenuti
         }
     }
