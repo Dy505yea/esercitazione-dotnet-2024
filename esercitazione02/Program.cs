@@ -13,6 +13,7 @@
             List<int> listaNumeri=new List<int> {8, 21, 444, 12, 90};
             List<string> listaNomi=new List<string> {"Osvaldo", "Enrico", "Tommaso"};
             
+            
             Console.WriteLine($"Buonasera {listaNomi[0]}, {listaNomi[1]}, {listaNomi[2]}\n");
             Console.WriteLine($"I vostri numeri: {listaNumeri[0]}, {listaNumeri[1]}, {listaNumeri[2]}, {listaNumeri[3]}, {listaNumeri[4]}\n\n");
 
