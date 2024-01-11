@@ -26,5 +26,28 @@
             Queue<string> codaNomi= new Queue<string> (new string[] {"Dario", "Silvio", "Agata"});
             
             Console.WriteLine($"Sono a nome di {codaNomi.Dequeue()}, {codaNomi.Dequeue()}, {codaNomi.Dequeue()}\n\n");
+
+            //prova vari metodi
+            //join
+            string allInOne= String.Join(", ", listaNomi);
+            
+            Console.WriteLine($"Rispondete, {allInOne}\n\n");
+
+            //remove
+            Console.WriteLine($"E ora, uno di voi verrà eliminato\nQuelli che rimangono sono...\n\n");
+            string why= "Enrico";
+            listaNomi.Remove(why);
+            string survived= String.Join(",", listaNomi);
+            
+            Console.WriteLine($"{survived}.\nQuindi tra {allInOne}; {why} sei eliminato, sgomma\n\n");
+
+
+            //sort
+            Console.WriteLine("Vi ricordate come ordinare i numeri?");
+            string allOfEm=String.Join(", ", listaNumeri);
+            listaNumeri.Sort();
+            string orderEm= String.Join(",", listaNumeri);
+            
+            Console.WriteLine($"\nVi ricordo che avete {allOfEm}\nDovrebbe essere {orderEm}\n\n");
         }
     }
