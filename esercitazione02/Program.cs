@@ -2,13 +2,13 @@
     {
         static void Main(string[] args)
         {
-            //<> è definito come diamond
-            List<string> nomi = new List<string>();
-            //ciò che è sottostante son metodi, non più assegnazioni
-            nomi.Add("Mario");
-            //infatti, gli elementi son inseriti tramite le parantesi, invece di =
-            nomi.Add("Luigi");
-            nomi.Add("Giovanni");
-            Console.WriteLine($"Buonaseeeeera   {nomi[0]}, {nomi[1]}, {nomi[2]}");
+            //Una pila è come mettere delle biglie in un tubo su misura: la prima che metti sarà l'ultima che toglierai
+            Stack<string> nomi = new Stack<string>();
+            nomi.Push("Mario");
+            nomi.Push("Luigi");
+            nomi.Push("Giovanni");
+            //ed esattamente con questo concetto, l'unico modp per printare gli elementi è col seguente metodo
+            Console.WriteLine($"Buonaseeeeera   {nomi.Pop()}, {nomi.Pop()}, {nomi.Pop()}");
+            //L'ultimo elemento è il primo a venir fuori
         }
     }
