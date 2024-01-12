@@ -2,18 +2,33 @@
     {
         static void Main(string[] args)
         {
-            int i=1;
-            int subject=16;
-            Console.WriteLine($"Fammi contare almeno dopo il 2, poi ti dico cosa può già dividere il numero {subject}");
-            while((subject%i)!=0||i<=2)
+            //array di nomi random
+            string[] nomi= new string[] {"Mario", "Giuseppe", "Marco", "Felipe", "Mirco", "Estriper", "Mario", "Schettino", "Mario"};
+            //lista che si occuperà di riempirsi di Mario
+            List<string> laLista= new List<string>();
+            //associazione di dove sta mario nell'array
+            Dictionary<int, string> numeralo=new Dictionary<int, string>();
+            //Mario è ricercato, perchè? Boh, avrà messo dell'ananas sulla pizza
+            string wanted="Mario";
+            //contatore, per sapere quante volte il ricercato è stato trovato
+            int conta=0;
+            //posizione nell'array
+            int pos=0;
+            Console.WriteLine($"Ricerca di {wanted} in corso");
+            foreach(string letto in nomi)
             {
-                if(i==1)
-                    Console.WriteLine($"{i} sasso");
-                else
-                    Console.WriteLine($"{i} sassi");
-                Console.WriteLine($"Passo\n");
-                i++;
+                if(letto==wanted)
+                {
+                    conta++;
+                    laLista.Add(letto);
+                    numeralo.Add(pos, letto);
+                }
+                pos++;
             }
-            Console.WriteLine($"Per dividere il numero {subject}, va bene il numero {i}");
+            Console.WriteLine($"Trovato {wanted} {conta} volta/e");
+            foreach(int chiave in numeralo.Keys)
+            {
+                Console.WriteLine($"Nella linea {chiave}, è stato rilevato {numeralo[chiave]}");
+            }
         }
     }
