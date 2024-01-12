@@ -15,7 +15,7 @@
             //posizione nell'array
             int pos=0;
             Console.WriteLine($"Ricerca di {wanted} in corso");
-            //ciclo foreach nell'array, letto è ciò che ritorna per orgni elemento
+            //ciclo foreach nell'array, letto è ciò che ritorna per ogni elemento
             foreach(string letto in nomi)
             {
                 //se l'abbiamo stanato
