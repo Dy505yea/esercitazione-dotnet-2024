@@ -2,11 +2,15 @@
     {
         static void Main(string[] args)
         {
-           Console.WriteLine($"Come ti chiami?");
-           string? nome= Console.ReadLine();
-           //se metti il metodo Convert.ToInt32(Console.ReadLine()), puoi convertire in int ciò che hai messo
-           Console.WriteLine($"{nome}... premi da qualche parte per andartene");
-           Console.ReadKey();
+            List<string> nomi=new List<string>();
+            nomi.Add("Rossi");
+            nomi.Add("Luigi");
+            nomi.Add("Lorenzo");
+            int i=0;
+            while(i<nomi.Count)
+            {
+                Console.WriteLine($"Ciao {nomi[i]}");
+                i++;
+            }
         }
-           
     }
