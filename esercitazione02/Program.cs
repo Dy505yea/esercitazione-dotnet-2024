@@ -1,41 +1,30 @@
 ﻿class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
-        Console.BackgroundColor = ConsoleColor.DarkCyan;
-        Console.Clear(); // Pulisce la console ad ogni iterazione
-        int i=0;
-        while(true)
+        //Console.BackgroundColor=ConsoleColor.DarkCyan;
+
+        int timeoutSeconds=5;   //tempo di attesa di 5 secondi
+
+        Task inputTask= Task.Run(()=>
         {
-            Console.WriteLine("Hai 3 opzioni:\n\n-1 Per fare na piccola prova col cursore\n-2 Per pulire la console\n-3 per beepare\n-4 titolo");
-            i= Convert.ToInt32(Console.ReadLine());
-            if(i<5&&i>0)
-            {
-                break;
-            }
+            Console.WriteLine($"Metti n'input entro {timeoutSeconds} secondi:");
+            return Console.ReadLine();
+        });
+        Task delayTask= Task.Delay(TimeSpan.FromSeconds(timeoutSeconds));
+
+        //ricorda, await necessita di essere asincrono, quindi modificare lo static di inizio
+        //con "static async Task main(string[] args)
+        if(await Task.WhenAny(inputTask, delayTask)==inputTask)
+        {
+            //congrats, hai scritto in tempo
+            string input= await (inputTask as Task<string>);
+            Console.WriteLine($"Hai inserito: {input}");
         }
-        Console.Title="Na piccola provetta";
-        string titolo=Console.Title;
-        switch(i)
+        else
         {
-            case 1:
-                Console.CursorVisible=false;
-                Console.WriteLine("Dimmi quando vuoi fermarti pigiando qualsiasi cosa");
-                Console.ReadKey();
-                Console.CursorVisible=true;
-                break;
-            case 2:
-                Console.Clear();
-                Console.WriteLine("Tutto pulito");
-                break;
-            case 3:
-                Console.Beep();
-                Console.Beep(750, 300);
-                Console.WriteLine($"Fatto");
-                break;
-            case 4:
-                Console.WriteLine($"{titolo}");
-                break;
-        };
+            //oof, manco 5 secondi ce la fai, eh?
+            Console.WriteLine("Tempo scaduto...");
+        }
     }
 }
