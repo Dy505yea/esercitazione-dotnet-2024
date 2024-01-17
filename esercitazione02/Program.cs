@@ -2,35 +2,45 @@
 {
     static void Main(string[] args)
     {
-        //guess stavolta si guarderà ai random
-
-        //prima ancora di usarlo, bisogna dichiarare una variabile random
-        Random ran=new Random();
-        int somma=0;
-        Console.WriteLine($"Farò una somma di 10 numeri casuali\n");
-        //per vedere lentamente che numeri escono
-        Thread.Sleep(1000);
-        //facciamo un ciclino da 10
-        for(int i=0; i<10; i++)
+        Console.WriteLine($"Tempo di provare a fare na selezione:\n");
+        //lista di nomi
+        List<string> nomi= new List<string>{};
+        //facciamo che non lo vogliano prefatto, ma decidere noi cosa mettere
+        int i=0;
+        while(i<=0)
         {
-            //il metodo .Next prenderà un numero tra numero A come, minimo, e numero B-1, come massimo
-            int x=ran.Next(1, 11);
-            //quindi in questo caso tra 1 e 10 (non 11)
-            Console.Write($"{i+1}° numero: ");
-            //modifica colore del numero per evidenziarlo
-            Console.ForegroundColor=ConsoleColor.Red;
-            Console.WriteLine($"{x}");
-            //reset solo per non evidenziare il resto
-            Console.ResetColor();
-            //giusto per vedere cosa è uscito
-            somma+=x;
-            //per vedere lentamente che numeri escono
-            Thread.Sleep(1000);
+            Console.WriteLine($"Quanti ne vuoi mettere?");
+            string secure=Console.ReadLine();
+            if(int.TryParse(secure, out i))
+            {
+                i=Convert.ToInt32(secure);
+                if(i>1)
+                {
+                    Console.WriteLine($"\nBene, ne abbiamo {i}\n");
+                    break;
+                }
+                Console.WriteLine($"\nQualcuno qui ha un pò di astio\n");
+                break;
+            }
+            Console.WriteLine("\nSo che è difficile, ma almeno un nome lo dobbiamo mettere in questa roulette\n");
         }
-        Console.Write($"\nLa somma è venuta ");
-        //un altro colore per non confonderlo con la sequenza di numeri casuali
-        Console.ForegroundColor=ConsoleColor.Magenta;
-        Console.WriteLine($"{somma}");
-        Console.ResetColor();
+        for(int l=0; l<i; l++)
+        {
+            Console.Write($"Mettiamo il numero {l+1}: ");
+            nomi.Add(Console.ReadLine());
+            Console.Write($"\n");
+        }
+        //random
+        Random ran=new Random();
+        //selezione
+        int scelto= ran.Next(0, nomi.Count);
+        //debug
+        Console.Write($"Ne ho {nomi.Count}, di cui ho scelto il numero {scelto+1}");
+        if(i==1)
+        {
+            Console.Write($", sorprendentemente...");
+        }
+        //risultato
+        Console.WriteLine($"\n\nLo sfortunato vincitore è {nomi[scelto]}");
     }
 }
