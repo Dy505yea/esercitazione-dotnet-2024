@@ -1,34 +1,36 @@
 ﻿class Program
 {
-    static async Task Main(string[] args)
+    static void Main(string[] args)
     {
-        int timeoutSeconds=5;   //tempo di attesa di 5 secondi
+        //guess stavolta si guarderà ai random
 
-        //oggetto task, probabilkmente per creare un mini thread tramite .Run(()=>{});
-        Task inputTask= Task.Run(()=>
+        //prima ancora di usarlo, bisogna dichiarare una variabile random
+        Random ran=new Random();
+        int somma=0;
+        Console.WriteLine($"Farò una somma di 10 numeri casuali\n");
+        //per vedere lentamente che numeri escono
+        Thread.Sleep(1000);
+        //facciamo un ciclino da 10
+        for(int i=0; i<10; i++)
         {
-            //Questo minithread si occupa solo di prendere in input qualsiasi cosa, usando variabili dal thread principale
-            Console.WriteLine($"Metti n'input entro {timeoutSeconds} secondi:");
-            //finisce il momento in cui si prema invio
-            return Console.ReadLine();
-        });
-        //il .Delay è per aprire una task dopo x tempo, in sto caso si chiama delayTask
-        Task delayTask= Task.Delay(TimeSpan.FromSeconds(timeoutSeconds));
-
-        //ricorda, await necessita di essere asincrono, quindi modificare lo static di inizio
-        //con "static async Task main(string[] args)
-        if(await Task.WhenAny(inputTask, delayTask)==inputTask)
-        //comunque, await fa attendere l'if che una task finisca, in sto caso .WhenAny, una qualsiasi task che finisca per prima
-        {
-            //se inputTask (quello che attende un input) finisce prima della task ritardata (delayTask, che non ha niente da eseguire, per cui già torna subito)
-            //allora .WhenAny ritornerà ciò che ha inputTask (e dato che allora diviene inputTask==inputTask, diverrà vero)
-            string input= await (inputTask as Task<string>);
-            Console.WriteLine($"Hai inserito: {input}");
+            //il metodo .Next prenderà un numero tra numero A come, minimo, e numero B-1, come massimo
+            int x=ran.Next(1, 11);
+            //quindi in questo caso tra 1 e 10 (non 11)
+            Console.Write($"{i+1}° numero: ");
+            //modifica colore del numero per evidenziarlo
+            Console.ForegroundColor=ConsoleColor.Red;
+            Console.WriteLine($"{x}");
+            //reset solo per non evidenziare il resto
+            Console.ResetColor();
+            //giusto per vedere cosa è uscito
+            somma+=x;
+            //per vedere lentamente che numeri escono
+            Thread.Sleep(1000);
         }
-        else
-        {
-            //altrimenti, il momento in cui viene avviato delayTask, .WhenAny diverrà ciò, comparando allora delayTask==inputTask
-            Console.WriteLine("\nTempo scaduto...");
-        }
+        Console.Write($"\nLa somma è venuta ");
+        //un altro colore per non confonderlo con la sequenza di numeri casuali
+        Console.ForegroundColor=ConsoleColor.Magenta;
+        Console.WriteLine($"{somma}");
+        Console.ResetColor();
     }
 }
