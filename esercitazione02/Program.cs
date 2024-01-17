@@ -2,45 +2,23 @@
 {
     static void Main(string[] args)
     {
-        Console.WriteLine($"Tempo di provare a fare na selezione:\n");
-        //lista di nomi
-        List<string> nomi= new List<string>{};
-        //facciamo che non lo vogliano prefatto, ma decidere noi cosa mettere
-        int i=0;
-        while(i<=0)
+        Console.WriteLine($"Ti farò un riordinamento di robe a caso:\n");
+        //classe random per casualità
+        Random ran= new Random();
+        //lista di prova per questa dimostrazione
+        List<int> prova= new List<int>();
+        //mettiamo 10 elementi da riordinare
+        for(int i=0; i<10; i++)
         {
-            Console.WriteLine($"Quanti ne vuoi mettere?");
-            string secure=Console.ReadLine();
-            if(int.TryParse(secure, out i))
-            {
-                i=Convert.ToInt32(secure);
-                if(i>1)
-                {
-                    Console.WriteLine($"\nBene, ne abbiamo {i}\n");
-                    break;
-                }
-                Console.WriteLine($"\nQualcuno qui ha un pò di astio\n");
-                break;
-            }
-            Console.WriteLine("\nSo che è difficile, ma almeno un nome lo dobbiamo mettere in questa roulette\n");
+            prova.Add(ran.Next(0, 11));
+            //stampa di cosa è uscito
+            Console.Write($"{prova[i]}, ");
         }
-        for(int l=0; l<i; l++)
-        {
-            Console.Write($"Mettiamo il numero {l+1}: ");
-            nomi.Add(Console.ReadLine());
-            Console.Write($"\n");
-        }
-        //random
-        Random ran=new Random();
-        //selezione
-        int scelto= ran.Next(0, nomi.Count);
-        //debug
-        Console.Write($"Ne ho {nomi.Count}, di cui ho scelto il numero {scelto+1}");
-        if(i==1)
-        {
-            Console.Write($", sorprendentemente...");
-        }
-        //risultato
-        Console.WriteLine($"\n\nLo sfortunato vincitore è {nomi[scelto]}");
+        //riordinamento
+        Console.Write($"\n\nOra lo riordino:\n");
+        //basta solo richiamare il metodo, dal minore al maggiore
+        prova.Sort();
+        Console.WriteLine($"{string.Join(", ", prova)}");
+        Console.WriteLine($"\nHopefully, tutto è andato come voluto");
     }
 }
