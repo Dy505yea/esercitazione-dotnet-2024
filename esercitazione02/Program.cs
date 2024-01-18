@@ -2,23 +2,43 @@
 {
     static void Main(string[] args)
     {
-        Console.WriteLine($"Ti farò un riordinamento di robe a caso:\n");
-        //classe random per casualità
-        Random ran= new Random();
-        //lista di prova per questa dimostrazione
-        List<int> prova= new List<int>();
-        //mettiamo 10 elementi da riordinare
-        for(int i=0; i<10; i++)
+        Console.WriteLine($"Da qui un numero\n");
+        double x = double.Parse(Console.ReadLine());
+        double result = 0;
+        Console.WriteLine($"Hai 3 possibili operazioni:\n- Radice quadrata (metti 'v')\n- Quadrato (metti 'q')\n- Cubo (metti 'c')");
+        while (true)
         {
-            prova.Add(ran.Next(0, 11));
-            //stampa di cosa è uscito
-            Console.Write($"{prova[i]}, ");
+            string opera = Console.ReadLine();
+            bool fax = false;
+            switch (opera)
+            {
+                case "v":
+                    result = Math.Sqrt(x);
+                    Console.WriteLine($"Radice selezionata");
+                    break;
+                case "q":
+                    result = Math.Pow(x, 2);
+                    Console.WriteLine($"Quadro selezionato");
+                    break;
+                case "c":
+                    result = Math.Pow(x, 3);
+                    Console.WriteLine($"Cubo selezionato");
+                    break;
+                default:
+                    Console.WriteLine($"Operazione non valida");
+                    fax=true;
+                    break;
+            }
+            if(!fax)
+            {
+                break;
+            }
         }
-        //riordinamento
-        Console.Write($"\n\nOra lo riordino:\n");
-        //basta solo richiamare il metodo, dal minore al maggiore
-        prova.Sort();
-        Console.WriteLine($"{string.Join(", ", prova)}");
-        Console.WriteLine($"\nHopefully, tutto è andato come voluto");
+        Console.WriteLine($"\nTi mostrerò il risultato in 3 modi");
+        var strano=result.ToString("#.##"); //è mera rappresentazione, i cancelletti son i decimali, il punto prima invece è generalizzazione
+        double rocco= Math.Round(result, 4);
+        Console.WriteLine($"Dal tronco: {Math.Truncate(result)}");  //tronca il numero fino all'integrale
+        Console.WriteLine($"Dalla rotonda: {rocco}");               //arrotonda
+        Console.WriteLine($"Da rappresentazione modificata {strano}");
     }
 }
