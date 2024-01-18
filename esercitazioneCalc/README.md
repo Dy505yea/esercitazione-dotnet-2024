@@ -242,20 +242,35 @@ class Program
 }
 ```
 
-## Versione 03 (cambio tipo di risultato per la divisione)
+## Versione 03
+
+### Tolto il resto per dare un risultato diverso per la divisione, tutti gli interi ora sono float per operazioni decimali, semplificazione di un blocco
 
 ```c#
 class Program
 {
     static void Main(string[] args)
     {
+        /*
+        metodo per inserire il primo numero                                     migliorie personali
+        idem il secondo                                                         aggiungere na lista di risultati da cui tornare
+        metodo per inserire operazione                                          forse una per le operazioni svolte (na cronologia insomma)
+        */
+        //i seguenti due metodi son stati messi solo per preferenza personale
+        Console.BackgroundColor = ConsoleColor.DarkCyan;
+        Console.Clear();
+
+
         Console.WriteLine("Calcolatrice terra terra\n");
 
         //Ciclo per far far fare più operazioni finchè si vuole
         while (true)
-        {//dichiarazione dei due numeri da usare
-            int primo = 0;
-            int secondo = 0;
+        {
+            //dichiarazione dei due numeri da usare
+            float primo = 0;
+            float secondo = 0;
+            string operando="";
+            float result=0;
 
 
             //scrittura del primo numero
@@ -265,10 +280,10 @@ class Program
                 //stringa temporanea per la procedura di sicurezza
                 string? safe = Console.ReadLine();
                 //controllo che si sia dato un effettivo valore numerico
-                if (int.TryParse(safe, out primo))
+                if (float.TryParse(safe, out primo))
                 {
                     //passo il primo numero
-                    primo = Convert.ToInt32(safe);
+                    primo = float.Parse(safe);
                     break;
                 }
                 //sennò faccio ridare l'input
@@ -283,10 +298,10 @@ class Program
             {
                 string? safe = Console.ReadLine();
                 //controllo che si sia dato un effettivo valore numerico
-                if (int.TryParse(safe, out secondo))
+                if (float.TryParse(safe, out secondo))
                 {
                     //passo il secondo numero
-                    secondo = Convert.ToInt32(safe);
+                    secondo = float.Parse(safe);
                     break;
                 }
                 //sennò faccio ridare l'input
@@ -300,30 +315,29 @@ class Program
             //scrittura dell'operando
             //token necessario per una procedura
             bool token = true;
+            //token per evitare di stampare cose strane
+            bool errato=false;
             while (token)
             {
                 //disattivo il token per evitare di riscrivere la sua attivazione per tutti i casi positivi
                 token = false;
                 //in caso l'operatore sia disponibile, il ciclo verrà chiuso
                 Console.WriteLine("\nInserisci l'operando:\n'+' per l'addizione\n'-' per la sottrazione\n'*' per la moltiplicazione\n'/' per la divisione\n");
-                string? operando = Console.ReadLine();
+                operando = Console.ReadLine();
                 //diverse operazioni per diversi tipi di operandi
                 switch (operando)
                 {
                     //Somma
                     case "+":
-                        int somma = primo + secondo;
-                        Console.WriteLine($"\nRisultato dell'addizione è: {somma}");
+                        result = primo + secondo;
                         break;
                     //Differenza
                     case "-":
-                        int differenza = primo - secondo;
-                        Console.WriteLine($"\nRisultato della sottrazione è: {differenza}");
+                        result = primo - secondo;
                         break;
                     //Prodotto
                     case "*":
-                        int prodotto = primo * secondo;
-                        Console.WriteLine($"\nRisultato della moltiplicazione è: {prodotto}");
+                        result = primo * secondo;
                         break;
                     //Quoziente con decimali
                     case "/":
@@ -331,10 +345,11 @@ class Program
                         if (secondo == 0)
                         {
                             Console.WriteLine($"\nImpossibile dividere per 0");
+                            errato=true;
                             break;
                         }
-                        float quoziente = (float)primo / (float)secondo;
-                        Console.WriteLine($"\nRisultato della divisione è: {quoziente}");
+                        result = (float)primo / (float)secondo;
+                        //Console.WriteLine($"\nRisultato della divisione è: {result}");
                         break;
                     //Problema con la stringa digitata
                     default:
@@ -344,6 +359,9 @@ class Program
                         break;
                 }
             }
+            //stampa risultato, se non è accaduto niente di strano
+            if(!errato)
+                Console.WriteLine($"{primo} {operando} {secondo} fa {result}");
 
 
             //Richiesta di ripetizione di tutte le operazioni eseguite
