@@ -1,0 +1,15 @@
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\bin\Debug\net8.0\esercitazioneCalc.exe
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\bin\Debug\net8.0\esercitazioneCalc.deps.json
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\bin\Debug\net8.0\esercitazioneCalc.runtimeconfig.json
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\bin\Debug\net8.0\esercitazioneCalc.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\bin\Debug\net8.0\esercitazioneCalc.pdb
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.AssemblyInfoInputs.cache
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.AssemblyInfo.cs
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.csproj.CoreCompileInputs.cache
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.sourcelink.json
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\refint\esercitazioneCalc.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.pdb
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\esercitazioneCalc.genruntimeconfig.cache
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazioneCalc\obj\Debug\net8.0\ref\esercitazioneCalc.dll
