@@ -88,20 +88,16 @@
                         int prodotto = primo * secondo;
                         Console.WriteLine($"\nRisultato della moltiplicazione è: {prodotto}");
                         break;
-                    //Quoziente con Resto
+                    //Quoziente con decimali
                     case "/":
-                        //here the funny thing: la divisione ha diverse cose da esser controllate rispetto alle altre operazioni
-                        //primo, è impossibile fare una divisione per 0
+                        //evito di fare l'operazione col 0
                         if (secondo == 0)
                         {
-                            Console.WriteLine($"\nImpossibile dividere lo 0");
+                            Console.WriteLine($"\nImpossibile dividere per 0");
                             break;
                         }
-                        int quoziente = primo / secondo;
-                        //secondo, a differenza delle altre operazioni, la divisione ha alta probabilità di dare dei decimali
-                        //ma dato che per ora evitiamo di andare fuori dagli interi, aggiungici un resto in tal caso
-                        int resto = primo % secondo;
-                        Console.WriteLine($"\nRisultato della divisione è: {quoziente}, con resto {resto}");
+                        float quoziente = (float)primo / (float)secondo;
+                        Console.WriteLine($"\nRisultato della divisione è: {quoziente}");
                         break;
                     //Problema con la stringa digitata
                     default:
