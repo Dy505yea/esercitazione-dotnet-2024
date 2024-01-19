@@ -1,13 +1,12 @@
-﻿using System.Globalization; //such comando è per introdurre delle cose
-//in questo caso specifico, è per evitare che la lingua di sistema cambi i decimali in altro
-
-class Program
+﻿class Program
 {
     static void Main(string[] args)
     {
-        //per forzare il sistema a funzionare nella versione americana
-        //in modo da evitare problemi nell'uso delle virgole e punti per i decimali
-        CultureInfo.CurrentCulture=new CultureInfo("en-US");
+        /*
+        metodo per inserire il primo numero                                     migliorie personali
+        idem il secondo                                                         aggiungere na lista di risultati da cui tornare
+        metodo per inserire operazione                                          forse una per le operazioni svolte (na cronologia insomma)
+        */
         //i seguenti due metodi son stati messi solo per preferenza personale
         Console.BackgroundColor = ConsoleColor.DarkCyan;
         Console.Clear();
@@ -19,10 +18,10 @@ class Program
         while (true)
         {
             //dichiarazione dei due numeri da usare
-            double primo = 0;
-            double secondo = 0;
+            float primo = 0;
+            float secondo = 0;
             string operando="";
-            double result=0;
+            float result=0;
 
 
             //scrittura del primo numero
@@ -32,12 +31,10 @@ class Program
                 //stringa temporanea per la procedura di sicurezza
                 string? safe = Console.ReadLine();
                 //controllo che si sia dato un effettivo valore numerico
-                if (double.TryParse(safe, out primo))
+                if (float.TryParse(safe, out primo))
                 {
-                    //il rimpiazzo serve per far si che si usino i decimali anche se metti la virgola
-                    safe=safe.Replace(",",".");
                     //passo il primo numero
-                    primo = double.Parse(safe);
+                    primo = float.Parse(safe);
                     break;
                 }
                 //sennò faccio ridare l'input
@@ -52,11 +49,10 @@ class Program
             {
                 string? safe = Console.ReadLine();
                 //controllo che si sia dato un effettivo valore numerico
-                if (double.TryParse(safe, out secondo))
+                if (float.TryParse(safe, out secondo))
                 {
-                    safe=safe.Replace(",",".");
                     //passo il secondo numero
-                    secondo = double.Parse(safe);
+                    secondo = float.Parse(safe);
                     break;
                 }
                 //sennò faccio ridare l'input
@@ -76,10 +72,8 @@ class Program
             {
                 //disattivo il token per evitare di riscrivere la sua attivazione per tutti i casi positivi
                 token = false;
-                //in caso l'operatore sia disponibile, il ciclo verrà chiuso        '*' per la moltiplicazione\n'/' per la divisione\n
-                Console.WriteLine("\nInserisci l'operando:\n'+' per l'addizione\n'-' per la sottrazione");
-                Console.WriteLine("'*' per la moltiplicazione\n'/' per la divisione");
-                Console.WriteLine("'v' per la radice quadrata del primo numero\n'^' per l'esponenziale");
+                //in caso l'operatore sia disponibile, il ciclo verrà chiuso
+                Console.WriteLine("\nInserisci l'operando:\n'+' per l'addizione\n'-' per la sottrazione\n'*' per la moltiplicazione\n'/' per la divisione\n");
                 operando = Console.ReadLine();
                 //diverse operazioni per diversi tipi di operandi
                 switch (operando)
@@ -105,16 +99,8 @@ class Program
                             errato=true;
                             break;
                         }
-                        result = (double)primo / (double)secondo;
+                        result = (float)primo / (float)secondo;
                         //Console.WriteLine($"\nRisultato della divisione è: {result}");
-                        break;
-                    //quadrato
-                    case "v":
-                        result = (double)Math.Sqrt(primo);
-                        break;
-                    //elevazione
-                    case "^":
-                        result = (double)Math.Pow(primo,secondo);
                         break;
                     //Problema con la stringa digitata
                     default:
@@ -124,11 +110,6 @@ class Program
                         break;
                 }
             }
-            /*
-            truncate
-            tostring("#.##")
-            round
-            */
             //stampa risultato, se non è accaduto niente di strano
             if(!errato)
                 Console.WriteLine($"{primo} {operando} {secondo} fa {result}");
