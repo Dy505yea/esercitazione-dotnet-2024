@@ -74,7 +74,7 @@
                 token = false;
                 //in caso l'operatore sia disponibile, il ciclo verrà chiuso
                 Console.WriteLine("\nInserisci l'operando:\n'+' per l'addizione\n'-' per la sottrazione\n'*' per la moltiplicazione\n'/' per la divisione\n");
-                operando = Console.ReadLine();
+                operando = Console.ReadLine()!;
                 //diverse operazioni per diversi tipi di operandi
                 switch (operando)
                 {
