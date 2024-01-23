@@ -93,6 +93,7 @@
                     //Quoziente con decimali
                     case "/":
                         //evito di fare l'operazione col 0
+                        
                         if (secondo == 0)
                         {
                             Console.WriteLine($"\nImpossibile dividere per 0");
@@ -100,6 +101,18 @@
                             break;
                         }
                         result = (float)primo / (float)secondo;
+                        /*
+                        try
+                        {
+                            int proof=(int)primo/(int)secondo;
+                            result=(float)primo/(float)secondo;
+                        }
+                        catch
+                        {
+                            Console.WriteLine("\nImpossibile dividere per 0");
+                            errato=true;
+                        }
+                        */
                         //Console.WriteLine($"\nRisultato della divisione è: {result}");
                         break;
                     //Problema con la stringa digitata

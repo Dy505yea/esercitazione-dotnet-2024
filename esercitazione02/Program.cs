@@ -2,15 +2,27 @@
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("salvesalvesalve");
+        Console.Clear();
         try
         {
-            int[] numeri= new int[int.MaxValue];
+            Console.WriteLine($"Da qui un numero\n");
+            int numero=int.Parse(Console.ReadLine()!);
+            if(numero<0||numero >10)
+            {
+                Console.WriteLine("surprise, volevo tra 0 e 10");
+                return;
+            }
+            Console.WriteLine($"\nHai scritto : {numero}");
         }
         catch(Exception e)
         {
-            Console.WriteLine("mi stai dando il mondo");
+            Console.WriteLine("c'è qualcosa di sbagliato...");
+            Console.WriteLine("\n"+e.Message);
+            return;
         }
-        Console.WriteLine("sas");
+        finally
+        {
+            Console.WriteLine("e niente, c'hai provato");
+        }
     }
 }
