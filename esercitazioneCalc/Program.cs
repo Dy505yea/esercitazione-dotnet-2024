@@ -28,44 +28,35 @@
             Console.WriteLine("Inserisci il primo numero\n");
             while (true)
             {
-                //stringa temporanea per la procedura di sicurezza
-                string? safe = Console.ReadLine();
-                //controllo che si sia dato un effettivo valore numerico
-                if (float.TryParse(safe, out primo))
+                try
                 {
-                    //passo il primo numero
-                    primo = float.Parse(safe);
+                    primo=float.Parse(Console.ReadLine()!);
                     break;
                 }
-                //sennò faccio ridare l'input
-                else
+                catch
                 {
-                    Console.WriteLine("Necessito di un valore numerico, riprova\n");
+                    Console.WriteLine("Necessito di un numero, riscrivi\n");
                 }
             }
             //scrittura secondo numero
             Console.WriteLine("\nInserisci il secondo numero\n");
             while (true)
             {
-                string? safe = Console.ReadLine();
-                //controllo che si sia dato un effettivo valore numerico
-                if (float.TryParse(safe, out secondo))
+                try
                 {
-                    //passo il secondo numero
-                    secondo = float.Parse(safe);
+                    secondo=float.Parse(Console.ReadLine()!);
                     break;
                 }
-                //sennò faccio ridare l'input
-                else
+                catch
                 {
-                    Console.WriteLine("Necessito di un valore numerico, riprova\n");
+                    Console.WriteLine("Necessito di un numero, riscrivi\n");
                 }
             }
             
 
             //scrittura dell'operando
             //token necessario per una procedura
-            bool token = true;
+            bool token=true;
             //token per evitare di stampare cose strane
             bool errato=false;
             while (token)
