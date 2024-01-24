@@ -8,8 +8,10 @@
         metodo per inserire operazione                                          forse una per le operazioni svolte (na cronologia insomma)
         */
         //i seguenti due metodi son stati messi solo per preferenza personale
-        Console.BackgroundColor = ConsoleColor.DarkCyan;
+        //Console.BackgroundColor = ConsoleColor.DarkCyan;
         Console.Clear();
+
+        //Aggiunta di liste per una "cronologia di operazioni"
 
 
         Console.WriteLine("Calcolatrice terra terra\n");
