@@ -3,26 +3,16 @@
     static void Main(string[] args)
     {
         Console.Clear();
-        try
-        {
-            Console.WriteLine($"Da qui un numero\n");
-            int numero=int.Parse(Console.ReadLine()!);
-            if(numero<0||numero >10)
-            {
-                Console.WriteLine("surprise, volevo tra 0 e 10");
-                return;
-            }
-            Console.WriteLine($"\nHai scritto : {numero}");
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine("c'è qualcosa di sbagliato...");
-            Console.WriteLine("\n"+e.Message);
-            return;
-        }
-        finally
-        {
-            Console.WriteLine("e niente, c'hai provato");
-        }
+        //la @ dovrebbe indicare la cartella in cui il programma viene eseguito
+        //se fosse stato nel desktop, sarebbe come aver messo "C:\Users\Utente\Desktop\filechevuoite.txt"
+        string path=@"..\esercitazione02\la provetta\test.txt"; //su c# almeno, i ".." indicano andare su di una cartella
+
+        string[] lines=File.ReadAllLines(path);                 //legge tutte le linee separatamente, mettendole in un array
+        Random ran= new Random();
+        int indx= ran.Next(lines.Length);
+        Console.WriteLine($"{lines[indx]}");
+        string pathFin=@"..\esercitazione02\la provetta\kricko.txt";
+        File.Create(pathFin).Close();
+        File.AppendAllText(pathFin, lines[indx]+"\n");
     }
 }
