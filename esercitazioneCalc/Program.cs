@@ -1,4 +1,6 @@
-﻿class Program
+﻿using System.Collections;
+
+class Program
 {
     static void Main(string[] args)
     {
@@ -12,7 +14,12 @@
         Console.Clear();
 
         //Aggiunta di liste per una "cronologia di operazioni"
-
+        Queue<float> primi= new Queue<float>();
+        Queue<float> secondi= new Queue<float>();
+        Queue<string> oprandi= new Queue<string>();
+        Queue<float> risulati= new Queue<float>();
+        int maxConti=5;
+        int conti=0;
 
         Console.WriteLine("Calcolatrice terra terra\n");
 
@@ -118,7 +125,22 @@
             }
             //stampa risultato, se non è accaduto niente di strano
             if(!errato)
+            {
+                if(conti>=maxConti)
+                {
+                    primi.Dequeue();
+                    oprandi.Dequeue();
+                    secondi.Dequeue();
+                    risulati.Dequeue();
+                }
+                else
+                    conti++;
                 Console.WriteLine($"{primo} {operando} {secondo} fa {result}");
+                primi.Enqueue(primo);
+                oprandi.Enqueue(operando);
+                secondi.Enqueue(secondo);
+                risulati.Enqueue(result);
+            }
 
 
             //Richiesta di ripetizione di tutte le operazioni eseguite
@@ -128,10 +150,11 @@
             {
                 //per farla semplice, volevo solo far digitare una lettera
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
-                //s per far tornare dalla richiesta del primo numero
+                //s per procedere con la prossima domanda
                 if (keyInfo.Key == ConsoleKey.S)
                 {
-                    Console.WriteLine("\n");
+                    Console.WriteLine("");
+                    Console.Clear();
                     break;
                 }
                 //n per finire il programma da qui
@@ -139,6 +162,30 @@
                 {
                     Console.WriteLine($"\n\nFine programma\n");
                     return;
+                }
+                //questione grafica: in caso di errore, preferisco non vedere nemmeno il carattere
+                Console.Write("\r \r"); //ma se fosse necessario vedere, si può lasciare solo "\r"
+            }
+            //Richiesta di ripetizione di tutte le operazioni eseguite
+            Console.WriteLine("\nVuoi vedere la cronologia?\n(Premi s per si, n per no)");
+            while (true)
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+                //s per far tornare dalla richiesta del primo numero
+                if (keyInfo.Key == ConsoleKey.S)
+                {
+                    Console.WriteLine($"");
+                    for(int i=0; i<conti; i++)
+                    {
+                        Console.WriteLine($"{primi.ElementAt(i)}{oprandi.ElementAt(i)}{secondi.ElementAt(i)}={risulati.ElementAt(i)}\n");
+                    }
+                    break;
+                }
+                //n per finire il programma da qui
+                else if (keyInfo.Key == ConsoleKey.N)
+                {
+                    Console.WriteLine($"\n");
+                    break;
                 }
                 //questione grafica: in caso di errore, preferisco non vedere nemmeno il carattere
                 Console.Write("\r \r"); //ma se fosse necessario vedere, si può lasciare solo "\r"
