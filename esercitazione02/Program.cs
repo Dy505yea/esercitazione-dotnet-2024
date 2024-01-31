@@ -9,16 +9,30 @@ class Program
         6 dadi, 2 assist, 4 haunted
         2 numeri da giocatore
         turni predefiniti
+        
         punteggio: modificato in base alle azioni scelte
-        puntegio... azione da poi pensarci è il ritiro dei dadi assist
+        punteggio... azione da poi pensarci è il ritiro dei dadi assist
+
+        punteggio- fare na media di punti minimi per turno
+        punteggio! ricalibrare quanto si guadagna, è più facile beccare qualcosa che non
+        punteggio!! magari osperà ne guadagna ancora di meno, solo metà
+
         file? se vuoi un top score or just una cronologia... but for now non lo considero una cosa urgente
         file?? salvataggio del turno corrente, in caso non hai molto tempo, ma vuoi continuare
         file??? token per ripresa, ask se vuole continuare, numero turno, punteggio dadi, punto totale
         file!! nome per sapere chi era, turno per sapere dove era rimasto, punto per sapere i punti, bool per sapere se era finita
+
         messaggi? errori, taunting, indovinato, random e incitazione... ringraziamento
+
         richiesta? se file, chiedi prima il nome per educazione, screanzato
         richiesta?? voler fare un altra partita
+
         random? da 1 a 6 per dado, da x a y per messaggio (!random se usi file per messaggio)
+
+        sottra punteggio? usare un numero costante come prezzo
+        sottra punteggio?? non si può se poi si va in debito
+        sottra punteggio??? Solo se il giocatore se lo può permettere
+
         grafica? hard for me, ma se devo separerei di tot per dado haunted, dadi assist rivelati solo su richiesta
         */
         Console.Clear();
