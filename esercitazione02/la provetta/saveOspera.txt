@@ -1,8 +1,8 @@
 Nome
-Star The	Original
+f
 Turno
-2
+1
 Punteggio Totale
-4
+10
 WIP?
 False

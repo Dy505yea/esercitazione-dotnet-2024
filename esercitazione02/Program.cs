@@ -2,6 +2,75 @@
 
 class Program
 {
+    /*
+    Variabile int a mo di array
+    il contatore per far circolare fino alla fine dell'array deve aumentare solo nel caso sostituisca qualcosa
+    magari una stampa diretta invece di sostituire robe nel file
+    il check deve beccare una specifica stringa che non verrà mai usata normalmente.. o almeno non in italiano/inglese
+    la funzione non deve toccare se non c'è proprio questo array
+    */
+    private static bool StampaTestoCsv(string path, int altern, params float[] values)
+    //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
+    {
+        try
+        {
+            try
+            {
+                string[] trova = File.ReadAllLines(path);
+                string[][] prova = new string[trova.Length][];
+                for (int i = 0; i < trova.Length; i++)
+                {
+                    prova[i] = trova[i].Split("|");//uno può utilizzare ciò che vuole, ma è alquanto importante decidere cosa usare per via della memoria usata per lo split in base al carattere
+                }
+                int count = 0;
+                for (int i = 0; i < prova.Length; i++)
+                {
+                    if (prova[i][0].Trim() == "pABLO" && count < values.Length)
+                    {
+                        prova[i][0] = values[count].ToString();
+                        count++;
+                    }
+                    if (Convert.ToInt32(prova[i][3]) == altern)
+                    {
+                        switch (Convert.ToInt32(prova[i][1]))
+                        {
+                            case 0:
+                                Console.ResetColor();
+                                break;
+                            case 1:
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                break;
+                            case 2:
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                break;
+                            case 3:
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                break;
+                            default:
+                                Console.WriteLine("Devi riscrivere i file, c'è qualcosa di strano in quel che ho letto");
+                                return false;
+                        }
+                        Console.Write(prova[i][0]);
+                        for (int l = 0; l < Convert.ToInt32(prova[i][2]); l++)
+                            Console.Write("\n");
+                    }
+                }
+                Console.ResetColor();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Riconfigura il codice o il file, qui c'è qualcosa di dannatamente sbagliato\n" + ex.Message);
+                return false;
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Sorry to break it to ya, but your whole team paid me to do this");
+            return false;
+        }
+
+        return true;
+    }
     static void Main(string[] args)
     {
         //Indovina, Osperà!
@@ -9,7 +78,7 @@ class Program
         6 dadi, 2 assist, 4 haunted
         2 numeri da giocatore
         turni predefiniti
-        
+
         punteggio: modificato in base alle azioni scelte
         punteggio... azione da poi pensarci è il ritiro dei dadi assist
 
@@ -34,6 +103,17 @@ class Program
         sottra punteggio??? Solo se il giocatore se lo può permettere
 
         grafica? hard for me, ma se devo separerei di tot per dado haunted, dadi assist rivelati solo su richiesta
+
+
+        unneeded thing... csv per i testi: adding a number to each sentence
+        unneeded thing.. number equals a color, switch case to decide... tho you'll need a function now... ya can't just use the block if you want it polished
+        unneeded thing. another variable to know what are ya talking 'bout in file.... i need json for this......
+        unneeded thing different files... each one does a specific thing... additional variable to know if one is the same
+        unneeded... thing... maybe even a variable to know you need a \n at the end
+        thing... unneeded... format=Text, color, how many \n, alternative
+
+        thing.. UNNEEEDEEEED add a way to add variables into the text, like for example: if csv starts with "x", substitute with y[i]
+        THING...unneeedeeeeeeeeed.... use a sentence that has no sense to do that.... try with "vialen"
         */
         Console.Clear();
 
@@ -46,7 +126,7 @@ class Program
         float totPunto = 0;
         //nome del giocatore, per ora non avrà utilizzo finchè non arrivo al file
         string defaultName = "Player";
-        string player=defaultName;
+        string player = defaultName;
         //dadi Osperà (avendo un pò un ruolo da aiutante, lo considero principalmente come assistente), ce ne saranno 2
         int[] dadAss = new int[2];
         //i dadispera, ce ne saranno 4
@@ -55,7 +135,7 @@ class Program
         int guess = 1;    //base di un dadospera
         int sumGuess = 2; //somma di 2 dadispera... o uno base
         //turni di una partita
-        int maxTurn = 2;
+        int maxTurn = 5;
         //token per rivelare i dadi assist
         int reveal = 0;
         //token per terminare la partita
@@ -70,6 +150,10 @@ class Program
         float assBas = (float)Math.Ceiling(basic - basic / 4);
         //asSum è il punteggio se l'assist indovina una somma
         float asSum = (float)Math.Ceiling(sumBasic - sumBasic / 4);
+        //punteggio minimo per effettivamente vincere
+        float vinPunt = sumBasic * maxTurn;
+        //costo in punti per far tirare nuovamente ad Osperà
+        float pricePunt = (float)Math.Round(basic / 2);
         //usato meramente per debug
         int meTime = 500;
 
@@ -99,7 +183,19 @@ class Program
         }
         if (resume)
         {
-            Console.WriteLine($"Vedo che la partita era crashata per qualche motivo...\nPartita del giocatore {datiSave[1]}, Turno {datiSave[3]}, Punteggio {datiSave[5]}\nVuoi riprendere da qui?");
+            Console.Write($"Vedo che la partita era crashata per qualche motivo...\nPartita del giocatore ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"{datiSave[1]}");
+            Console.ResetColor();
+            Console.Write(", Turno ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"{datiSave[3]}");
+            Console.ResetColor();
+            Console.Write(", Punteggio ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"{datiSave[5]}");
+            Console.ResetColor();
+            Console.WriteLine("\nVuoi riprendere da qui?");
             Console.WriteLine("(Premi S per si, N per no)");
             while (true)
             {
@@ -124,8 +220,19 @@ class Program
             Console.Clear();
         }
 
-        //Thread.Sleep(2000);
-
+        string pathText = @"..\esercitazione02\csvsenteces\prova.csv";
+        bool allGood = true;
+        /*
+        //mero debug, per provare se funziona con un file csv di prova
+        allGood=StampaTestoCsv(pathText, 0);
+        if(!allGood)
+        {
+            return;
+        }
+        
+        
+        Thread.Sleep(2000);
+*/
 
 
 
@@ -141,11 +248,11 @@ class Program
             Console.WriteLine("...Ok, dopo questa entrata, ora andiamo effetivamente al gioco");
             Thread.Sleep(900);
             Console.WriteLine("\nMi diresti il tuo nome prima di iniziare?");
-            player=Console.ReadLine()!;
-            if(player.Trim().Length<=0)
+            player = Console.ReadLine()!;
+            if (player.Trim().Length <= 0)
             {
                 Console.WriteLine($"Allora ti chiamerò {defaultName}, dato che ti piace fare il misterioso");
-                player=defaultName;
+                player = defaultName;
             }
             else
             {
@@ -155,7 +262,7 @@ class Program
         }
         while (!end)
         {
-            datiSave[1]=player;
+            datiSave[1] = player;
             //sarà sempre falso dal secondo ciclo in poi, in modo da evitare la domanda all'inizio
             if (!rule)
             {
@@ -183,81 +290,14 @@ class Program
             //il check del token è per prevenire di riscrivere il regolamento di nuovo in una partita
             if (rule)
             {
+                pathText = @"..\esercitazione02\csvsenteces\regoleOspera.csv";
                 //Regolamento, una lunga serie di print
-                Console.WriteLine("\nLe regole:\n- Puoi provare ad indovinare 2 numeri, un numero base di 1 dado ed una somma di 2 dadi");
-                Thread.Sleep(meTime);
-                Console.Write($"- Indovina il numero base di un ");
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write($"Dadospera");
-                Console.ResetColor();
-                Console.Write($", ottieni ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(basic);
-                Console.ResetColor();
-                Console.Write($" punti, indovina una somma di 2 e ne otterrai ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(sumBasic);
-                Console.ResetColor();
-                Console.Write($", indovina ambo e ne otterrai ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(basic * 3);
-                Console.ResetColor();
-                Thread.Sleep(meTime);
-                Console.WriteLine("- Volendo, puoi invece provare ad indovinare un altro numero base, ma in quel caso non otterrai più punti");
-                Thread.Sleep(meTime);
-                Console.Write($"- Hai a disposizione 2 dadi ");
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write($"Osperà");
-                Console.ResetColor();
-                Console.Write(" che possono aiutarti, ma il loro punteggio è ");
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("ridotto");
-                Console.ResetColor();
-                Console.Write(",");
-                Console.Write($" rispettivamente dando ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(assBas);
-                Console.ResetColor();
-                Console.Write($" e ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(asSum);
-                Console.ResetColor();
-                Thread.Sleep(meTime);
-                Console.Write($"- Li puoi rivelare anche se hai indovinato, ma far ciò ");
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write($"dimezzerà");
-                Console.ResetColor();
-                Console.Write($" i punti ottenuti prima di rivelare ");
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"Osperà");
-                Console.ResetColor();
-                Thread.Sleep(meTime);
-                Console.Write($"- Se per caso nei ");
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write($"Dadispera");
-                Console.ResetColor();
-                Console.Write($" son presenti dei doppi, indovinando la somma di essi si otterrà ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(sumBasic + (float)Math.Truncate(sumBasic / 2));
-                Console.ResetColor();
-                Console.Write($", se si indovina il punto base, allora invece si otterrà ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine((float)Math.Truncate((basic * 2) + (basic / 2)));
-                Console.ResetColor();
-                Thread.Sleep(meTime);
-                Console.Write($"- La stessa regola si applica ai ");
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write($"dadi Osperà");
-                Console.ResetColor();
-                Console.Write($": rispettivamente ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(asSum + (float)Math.Truncate(asSum / 2));
-                Console.ResetColor();
-                Console.Write($" per la somma e ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write((float)Math.Truncate((assBas * 2) + (assBas / 2)));
-                Console.ResetColor();
-                Console.WriteLine($" per il base");
+                float[] valori = { basic, sumBasic, basic * 3, assBas, asSum, sumBasic + (float)Math.Truncate(sumBasic / 2), (float)Math.Truncate((basic * 2) + (basic / 2)), asSum + (float)Math.Truncate(asSum / 2), (float)Math.Truncate((assBas * 2) + (assBas / 2)) };
+                allGood = StampaTestoCsv(pathText, 0, valori);
+                if (!allGood)
+                {
+                    return;
+                }
                 Thread.Sleep(meTime);
                 Console.WriteLine("\nDetto ciò, iniziamo il gioco\n");
                 rule = false;
@@ -270,6 +310,7 @@ class Program
             if (resume)
             {
                 predefined = Convert.ToInt32(datiSave[3]);
+                totPunto = Convert.ToInt32(datiSave[5]);
             }
 
             //inizio del gioco
@@ -281,8 +322,8 @@ class Program
                 //Scrittura dei dati in una variabile, per poi salvarli verso la fine del turno...
                 //cambio piano, lo faccio salvare subito
                 datiSave[3] = i.ToString();
-                datiSave[5]= totPunto.ToString();
-                datiSave[7]= true.ToString();
+                datiSave[5] = totPunto.ToString();
+                datiSave[7] = true.ToString();
                 File.WriteAllLines(pathSave, datiSave);
 
                 //inizializzazione random all'inizio della manche per rendere più casuale possibile
@@ -728,14 +769,37 @@ class Program
                 Console.WriteLine($"{totPunto}\n");
                 Console.ResetColor();
 
+                //randomicamente si avviserà al giocatore quanti punti deve arrivare per vincere
+                int warn=0;
+                if(totPunto<vinPunt)
+                {
+                    warn=ran.Next(0,2);
+                    if(i==maxTurn-1||warn==1)
+                    {
+                        Console.Write("Ti ricordo che devi raggiungere ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write($"{vinPunt}");
+                        Console.ResetColor();
+                        Console.WriteLine(" per vincere\n");
+                    }
+                }
             }
 
-                //Scrittura dei dati in una variabile, per poi salvarli verso la fine del turno...
-                //cambio piano, lo faccio salvare subito
-                datiSave[3] = maxTurn.ToString();
-                datiSave[5]= totPunto.ToString();
-                datiSave[7]= false.ToString();
-                File.WriteAllLines(pathSave, datiSave);
+            if(totPunto>=vinPunt)
+            {
+                Console.WriteLine("Complimenti, hai vinto");
+            }
+            else
+            {
+                Console.WriteLine("Spiacente, hai perso");
+            }
+
+            //Scrittura dei dati in una variabile, per poi salvarli verso la fine del turno...
+            //cambio piano, lo faccio salvare subito
+            datiSave[3] = maxTurn.ToString();
+            datiSave[5] = totPunto.ToString();
+            datiSave[7] = false.ToString();
+            File.WriteAllLines(pathSave, datiSave);
 
 
             Console.WriteLine("\nVuoi Fare un altra partita?\n(Premi S per si, N per no)");
