@@ -1,0 +1,8 @@
+Nome
+Star The	Original
+Turno
+2
+Punteggio Totale
+4
+WIP?
+False

@@ -14,6 +14,7 @@ class Program
         file? se vuoi un top score or just una cronologia... but for now non lo considero una cosa urgente
         file?? salvataggio del turno corrente, in caso non hai molto tempo, ma vuoi continuare
         file??? token per ripresa, ask se vuole continuare, numero turno, punteggio dadi, punto totale
+        file!! nome per sapere chi era, turno per sapere dove era rimasto, punto per sapere i punti, bool per sapere se era finita
         messaggi? errori, taunting, indovinato, random e incitazione... ringraziamento
         richiesta? se file, chiedi prima il nome per educazione, screanzato
         richiesta?? voler fare un altra partita
@@ -25,25 +26,28 @@ class Program
 
         //variabile utilizzata per la reazione da parte del computer
         int critica = 0;
-        //utilizzato per il punteggio
+        //utilizzato per calcolo punti
         float punto = 0;
-        //in caso mi venisse in mente di fare un qualcosa di più complicato
+        //utilizzato per il punteggio finale
         float totPunto = 0;
         //nome del giocatore, per ora non avrà utilizzo finchè non arrivo al file
-        //string player = "Player";
+        string defaultName = "Player";
+        string player=defaultName;
         //dadi Osperà (avendo un pò un ruolo da aiutante, lo considero principalmente come assistente), ce ne saranno 2
         int[] dadAss = new int[2];
         //i dadispera, ce ne saranno 4
         int[] dadisp = new int[4];
         //2 variabili che verranno usate per indovinare i numeri
         int guess = 1;    //base di un dadospera
-        int sumGuess = 2; //somma di 2... o uno base
+        int sumGuess = 2; //somma di 2 dadispera... o uno base
         //turni di una partita
         int maxTurn = 2;
         //token per rivelare i dadi assist
         int reveal = 0;
         //token per terminare la partita
         bool end = false;
+        //token per sapere se il giocatore vuole risentire la spiegazione
+        bool rule = false;
         //basic è il punteggio per indovinare uno base, sarà soggetto a ricalibrazioni in caso vedessi che è troppo o troppo poco
         float basic = 4;
         //sumBasic è il punteggio per indovinare una somma
@@ -56,72 +60,222 @@ class Program
         int meTime = 500;
 
 
-        Console.Write("Buongiorno o Buonasera, miei cari telenovelaspettatori, oggi si dà inizio ad un altra partita diiiii\n\t\t");
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Thread.Sleep(700);
-        Console.WriteLine("INDOVINA, OSPERÀ!\n");
-        Console.ResetColor();
-        Thread.Sleep(1200);
-        Console.WriteLine("...Ok, dopo questa entrata, ora andiamo effetivamente al gioco");
-        Thread.Sleep(700);
+        //prova di apertura di un file... altrimenti se ne crea uno nuovo
+        //path del file di salvataggio
+        string pathSave = @"..\esercitazione02\la provetta\saveOspera.txt";
+        if (!File.Exists(pathSave))
+        {
+            File.Create(pathSave).Close();
+            string[] defaultStuff = { "Nome", player, "Turno", "0", "Punteggio Totale", "0", "WIP?", "False" };
+            for (int i = 0; i < 8; i++)
+            {
+                File.AppendAllText(pathSave, defaultStuff[i] + "\n");
+            }
+        }
+        string[] datiSave = File.ReadAllLines(pathSave);
+        bool resume = false;
+        try
+        {
+            resume = Convert.ToBoolean(datiSave[7]);
+        }
+        catch
+        {
+            Console.WriteLine("Mistakes were made my friend, devo risistemare una cosa, per ora mi finisco");
+            return;
+        }
+        if (resume)
+        {
+            Console.WriteLine($"Vedo che la partita era crashata per qualche motivo...\nPartita del giocatore {datiSave[1]}, Turno {datiSave[3]}, Punteggio {datiSave[5]}\nVuoi riprendere da qui?");
+            Console.WriteLine("(Premi S per si, N per no)");
+            while (true)
+            {
+                ConsoleKeyInfo risposta = Console.ReadKey(true);
+                if (risposta.Key == ConsoleKey.S)
+                {
+                    Console.WriteLine($"\nAight...");
+                    break;
+                }
+                else if (risposta.Key == ConsoleKey.N)
+                {
+                    Console.WriteLine($"\nMay you find your books in this place");
+                    resume = false;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Avrei bisogno di sapere se Si o No...");
+                }
+            }
+            Thread.Sleep(1500);
+            Console.Clear();
+        }
+
+        //Thread.Sleep(2000);
+
+
+
+
+        //questo token serve per evitare di dare i messaggi di introduzione se si sta riprendendo una partita ancora non finita
+        if (!resume)
+        {
+            Console.Write("Buongiorno o Buonasera, miei cari telenovelaspettatori, oggi si dà inizio ad un altra partita diiiii\n\n\t\t");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Thread.Sleep(700);
+            Console.WriteLine("INDOVINA, OSPERÀ!\n");
+            Console.ResetColor();
+            Thread.Sleep(1200);
+            Console.WriteLine("...Ok, dopo questa entrata, ora andiamo effetivamente al gioco");
+            Thread.Sleep(900);
+            Console.WriteLine("\nMi diresti il tuo nome prima di iniziare?");
+            player=Console.ReadLine()!;
+            if(player.Trim().Length<=0)
+            {
+                Console.WriteLine($"Allora ti chiamerò {defaultName}, dato che ti piace fare il misterioso");
+                player=defaultName;
+            }
+            else
+            {
+                Console.WriteLine($"Bene, {player}, piacere di conoscerti");
+            }
+            Thread.Sleep(900);
+        }
         while (!end)
         {
+            datiSave[1]=player;
+            //sarà sempre falso dal secondo ciclo in poi, in modo da evitare la domanda all'inizio
+            if (!rule)
+            {
+                Console.WriteLine("Vuoi sentire le regole?\n(S per si, N per no)");
+            Rispiega:
+                ConsoleKeyInfo reply = Console.ReadKey(true);
+                if (reply.Key == ConsoleKey.S)
+                {
+                    Console.WriteLine($"Fammi rileggere...");
+                    rule = true;
+                }
+                else if (reply.Key == ConsoleKey.N)
+                {
+                    Console.WriteLine($"Ok");
+                }
+                else
+                {
+                    Console.WriteLine("Avrei bisogno di sapere se Si o No...");
+                    goto Rispiega;
+                }
+                Thread.Sleep(meTime * 2);
+                Console.Clear();
+            }
+            //ho messo un blocco a parte per via della grandezza per la stampa del regolamento, tutto per questione di grafica
+            //il check del token è per prevenire di riscrivere il regolamento di nuovo in una partita
+            if (rule)
+            {
+                //Regolamento, una lunga serie di print
+                Console.WriteLine("\nLe regole:\n- Puoi provare ad indovinare 2 numeri, un numero base di 1 dado ed una somma di 2 dadi");
+                Thread.Sleep(meTime);
+                Console.Write($"- Indovina il numero base di un ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"Dadospera");
+                Console.ResetColor();
+                Console.Write($", ottieni ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(basic);
+                Console.ResetColor();
+                Console.Write($" punti, indovina una somma di 2 e ne otterrai ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(sumBasic);
+                Console.ResetColor();
+                Console.Write($", indovina ambo e ne otterrai ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(basic * 3);
+                Console.ResetColor();
+                Thread.Sleep(meTime);
+                Console.WriteLine("- Volendo, puoi invece provare ad indovinare un altro numero base, ma in quel caso non otterrai più punti");
+                Thread.Sleep(meTime);
+                Console.Write($"- Hai a disposizione 2 dadi ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write($"Osperà");
+                Console.ResetColor();
+                Console.Write(" che possono aiutarti, ma il loro punteggio è ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("ridotto");
+                Console.ResetColor();
+                Console.Write(",");
+                Console.Write($" rispettivamente dando ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(assBas);
+                Console.ResetColor();
+                Console.Write($" e ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(asSum);
+                Console.ResetColor();
+                Thread.Sleep(meTime);
+                Console.Write($"- Li puoi rivelare anche se hai indovinato, ma far ciò ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"dimezzerà");
+                Console.ResetColor();
+                Console.Write($" i punti ottenuti prima di rivelare ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"Osperà");
+                Console.ResetColor();
+                Thread.Sleep(meTime);
+                Console.Write($"- Se per caso nei ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"Dadispera");
+                Console.ResetColor();
+                Console.Write($" son presenti dei doppi, indovinando la somma di essi si otterrà ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(sumBasic + (float)Math.Truncate(sumBasic / 2));
+                Console.ResetColor();
+                Console.Write($", se si indovina il punto base, allora invece si otterrà ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine((float)Math.Truncate((basic * 2) + (basic / 2)));
+                Console.ResetColor();
+                Thread.Sleep(meTime);
+                Console.Write($"- La stessa regola si applica ai ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write($"dadi Osperà");
+                Console.ResetColor();
+                Console.Write($": rispettivamente ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(asSum + (float)Math.Truncate(asSum / 2));
+                Console.ResetColor();
+                Console.Write($" per la somma e ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write((float)Math.Truncate((assBas * 2) + (assBas / 2)));
+                Console.ResetColor();
+                Console.WriteLine($" per il base");
+                Thread.Sleep(meTime);
+                Console.WriteLine("\nDetto ciò, iniziamo il gioco\n");
+                rule = false;
+            }
 
 
-            //Regolamento, una lunga serie di print
-            Console.WriteLine("\nLe regole:\n- Puoi provare ad indovinare 2 numeri, un numero base di 1 dado ed una somma di 2 dadi");
-            Thread.Sleep(meTime);
-            Console.Write($"- Indovina il numero base di un dado ");
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write($"Haunted");
-            Console.ResetColor();
-            Console.WriteLine($", ottieni {basic} punti, indovina una somma di 2 e ne otterrai {sumBasic}, indovina ambo e ne otterrai {basic * 3}");
-            Thread.Sleep(meTime);
-            Console.WriteLine("- Volendo, puoi invece provare ad indovinare un altro numero base, ma in quel caso non otterrai più punti");
-            Thread.Sleep(meTime);
-            Console.Write($"- Hai a disposizione 2 dadi ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write($"Assist");
-            Console.ResetColor();
-            Console.Write(" che possono aiutarti, ma il loro punteggio è ridotto,");
-            Console.WriteLine($" rispettivamente dando {assBas} e {asSum}");
-            Thread.Sleep(meTime);
-            Console.Write($"- Li puoi rivelare anche se hai indovinato, ma far ciò ");
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write($"dimezzerà");
-            Console.ResetColor();
-            Console.Write($" i punti ottenuti prima di rivelare l'");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"assist");
-            Console.ResetColor();
-            Thread.Sleep(meTime);
-            Console.Write($"- Se per caso nei dadi ");
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write($"Haunted");
-            Console.ResetColor();
-            Console.Write($" son presenti dei doppi, indovinando la somma di essi si otterrà {sumBasic + (float)Math.Truncate(sumBasic / 2)}");
-            Console.WriteLine($", se si indovina il punto base, allora invece si otterrà {(float)Math.Truncate((basic * 2) + (basic / 2))}");
-            Thread.Sleep(meTime);
-            Console.Write($"- La stessa regola si applica agli ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write($"Assist");
-            Console.ResetColor();
-            Console.Write($": rispettivamente {asSum + (float)Math.Truncate(asSum / 2)} per la somma e");
-            Console.WriteLine($" {(float)Math.Truncate((assBas * 2) + (assBas / 2))} per il base");
-            Thread.Sleep(meTime);
-            Console.WriteLine("\nDetto ciò, iniziamo il gioco\n");
+            //questo è necessario solo per debug
+            //end = true;
+            int predefined = 0;
+            if (resume)
+            {
+                predefined = Convert.ToInt32(datiSave[3]);
+            }
 
-
-            //for now, questo è presente per terminare subito il programma, finché non aggiungerò il check per far scegliere al giocatore se finirla
-            end = true;
             //inizio del gioco
-            for (int i = 0; i < maxTurn; i++)
+            for (int i = predefined; i < maxTurn; i++)
             {
                 //inizializzazone della variabile volatile del punteggio
                 punto = 0;
+
+                //Scrittura dei dati in una variabile, per poi salvarli verso la fine del turno...
+                //cambio piano, lo faccio salvare subito
+                datiSave[3] = i.ToString();
+                datiSave[5]= totPunto.ToString();
+                datiSave[7]= true.ToString();
+                File.WriteAllLines(pathSave, datiSave);
+
                 //inizializzazione random all'inizio della manche per rendere più casuale possibile
                 Random ran = new Random();
+                Thread.Sleep(meTime);
                 Console.WriteLine($"{i + 1}° turno\n\nInserisci il numero base");
+                Thread.Sleep(meTime);
             SelezioneBase:
                 //tentativo per indovinare un numero base da parte del giocatore
                 try
@@ -176,9 +330,10 @@ class Program
                     dadisp[l] = ran.Next(1, 7);
                 }
                 //ma solo i dadi haunted vengono rivelati
-                Console.WriteLine($"Ecco a te i dadi haunted\n");
+                Thread.Sleep(meTime);
+                Console.Write($"Ecco a te i ");
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine($"\t{dadisp[0]}\t{dadisp[1]}\t{dadisp[2]}\t{dadisp[3]}\n");
+                Console.WriteLine($"Dadispera\n\n\t{dadisp[0]}\t{dadisp[1]}\t{dadisp[2]}\t{dadisp[3]}\n");
                 Console.ResetColor();
 
 
@@ -187,7 +342,7 @@ class Program
                 bool gotSome = false;
                 bool gotDoubleOne = false;
                 bool gotDoubleSome = false;
-                critica=0;
+                critica = 0;
                 //li si controlla uno ad uno
                 for (int l = 0; l < dadisp.Length; l++)
                 {
@@ -268,6 +423,7 @@ class Program
                     }
                 }
                 //reazioni in base a quanto ha azzeccato il giocatore
+                Thread.Sleep(meTime);
                 switch (critica)
                 {
                     case 6:
@@ -294,9 +450,15 @@ class Program
                 //in caso il giocatore avesse indovinato, li si chiede se vuole rischiare anche solo per vedere cosa aveva l'assistente
                 if (punto > 0)
                 {
-                    reveal=0;
+                    reveal = 0;
                     //si avvisa di quanti punti ha e del rischio in caso si volesse vedere che cosa hanno i dadi assistenti
-                    Console.WriteLine($"Congrats, puoi portarti a casa {punto} punti... oppure vuoi provare a vedere cosa tira fuori l'assistente al costo della metà dei tuoi punti?");
+                    Thread.Sleep(meTime);
+                    Console.Write($"Congrats, puoi portarti a casa ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Thread.Sleep(meTime);
+                    Console.Write(punto);
+                    Console.ResetColor();
+                    Console.WriteLine($" punti... oppure vuoi provare a vedere cosa tira fuori l'assistente al costo della metà dei tuoi punti?");
                     Console.WriteLine($"(1 per rivelare l'assistente, 2 per tenerti i punti)");
                 DecisioneRischio:
                     try
@@ -316,16 +478,31 @@ class Program
                     //se accetta il rischio, si dimezza di già il punteggio, il target è solo cò che ha indovinato il giocatore, non i dadi
                     if (reveal == 1)
                     {
+                        Thread.Sleep(meTime);
                         punto = (float)Math.Round(punto / 2);
-                        Console.WriteLine($"Ora i tuoi punti stanno a {punto}, vediamo se ne sarà valsa la pena\n");
+                        Console.Write($"Ora i tuoi punti stanno a ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Thread.Sleep(meTime);
+                        Console.Write(punto);
+                        Console.ResetColor();
+                        Thread.Sleep(meTime);
+                        Console.WriteLine($", vediamo se ne sarà valsa la pena\n");
                     }
                 }
                 //invece se il giocatore non ha preso niente...
                 else
                 {
                     //si dà il messsaggio per avvisarlo e chiedere se vuole vedere se magari l'assistente li da un qualche punto
-                    Console.WriteLine($"Uf, pare che la fortuna non sia dalla tua parte, puoi sempre sperare nell'assistente, se vuoi");
-                    Console.WriteLine($"(1 per rivelare l'assistente, 2 per gettare la spugna)");
+                    Console.Write($"Uf, pare che la fortuna non sia dalla tua parte, puoi sempre sperare in ");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write($"Osperà");
+                    Console.ResetColor();
+                    Console.WriteLine($", se vuoi");
+                    Console.Write($"(1 per rivelare i dadi ");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write($"Osperà");
+                    Console.ResetColor();
+                    Console.WriteLine($", 2 per gettare la spugna)");
                     reveal = 0;
                 VuoiContinuare:
                     try
@@ -349,15 +526,21 @@ class Program
                     }
                 }
                 //solo dopo il bivio, si aggiungerà il punteggio al punteggio finale
-                totPunto+=punto;
+                totPunto += punto;
 
 
 
                 //ora, questa è l'operazione per i dadi Osperà, che avranno un simile procedimento a prima... probabilmente in futuro creerò un metodo
                 if (reveal == 1)
                 {
-                    Console.WriteLine($"Ecco cosa l'assistente ha scelto per te:\n");
+                    Thread.Sleep(meTime);
+                    Console.Write($"Ecco cosa dice ");
                     Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write($"Osperà");
+                    Console.ResetColor();
+                    Console.WriteLine($":\n");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Thread.Sleep(meTime);
                     Console.WriteLine($"\t{dadAss[0]}\t{dadAss[1]}\n");
                     Console.ResetColor();
                     //token necessari per i punti, per diversi controlli ed il punteggio
@@ -366,7 +549,7 @@ class Program
                     gotDoubleOne = false;
                     gotDoubleSome = false;
                     critica = 0;
-                    punto=0;
+                    float assPunt = 0;
                     //a differenza di prima, i dadi assist hanno il vantaggio di aver ben 2 numeri base invece che uno, insieme alla somma
                     for (int l = 0; l < dadisp.Length; l++)
                     {
@@ -409,11 +592,11 @@ class Program
 
                     if (gotOne)
                     {
-                        punto = assBas;
+                        assPunt = assBas;
                         critica = 1;
                         if (gotDoubleOne)
                         {
-                            punto = (float)Math.Truncate((assBas * 2) + (assBas / 2));
+                            assPunt = (float)Math.Truncate((assBas * 2) + (assBas / 2));
                             critica = 3;
                         }
                     }
@@ -421,18 +604,18 @@ class Program
                     if (gotSome)
                     {
                         //il punto verrà applicato
-                        punto = asSum;
+                        assPunt = asSum;
                         critica = 2;
                         //se ha beccato a parte un numero base
                         if (gotOne)
                         {
                             //il punteggio applicato sarà quello speciale
-                            punto = assBas * 3;
+                            assPunt = assBas * 3;
                             critica = 5;
                             //e verrà ulteriormente aumentato se ha beccato i doppioni, una cosa moolto rara
                             if (gotDoubleSome && gotDoubleOne)
                             {
-                                punto = assBas * 4;
+                                assPunt = assBas * 4;
                                 critica = 6;
                             }
                         }
@@ -441,43 +624,124 @@ class Program
                         //ciò è fatto in modo da dar priorità al punteggio massimo
                         if (gotDoubleSome)
                         {
-                            punto = asSum + (float)Math.Truncate(asSum / 2);
+                            assPunt = asSum + (float)Math.Truncate(asSum / 2);
                             critica = 4;
                         }
                     }
                     //reazioni in base a quanto ha azzeccato il giocatore
+                    Thread.Sleep(meTime);
                     switch (critica)
                     {
                         case 6:
-                            Console.WriteLine($"HOLYMARYMOTHEROFJOSEPH, OSPERÀ HA TROVATO AMBO I DOPPIONI\n");
+                            Console.Write($"HOLYMARYMOTHEROFJOSEPH, ");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write($"OSPERÀ");
+                            Console.ResetColor();
+                            Console.WriteLine($" HA TROVATO AMBO I DOPPIONI\n");
                             break;
                         case 5:
-                            Console.WriteLine($"Wow, Osperà ha indovinato sia base che la somma\n");
+                            Console.Write($"Wow, ");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write($"Osperà");
+                            Console.ResetColor();
+                            Console.WriteLine($" ha indovinato sia base che la somma\n");
                             break;
                         case 4:
-                            Console.WriteLine($"Osperàsmus ha previsto la doppia somma\n");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write($"Osperàsmus");
+                            Console.ResetColor();
+                            Console.WriteLine($" ha previsto la doppia somma\n");
                             break;
                         case 3:
-                            Console.WriteLine($"Osperà è il nuovo cupido, ha trovato 2 single doppioni\n");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write($"Osperà");
+                            Console.ResetColor();
+                            Console.WriteLine($" è il nuovo cupido, ha trovato 2 single doppioni\n");
                             break;
                         case 2:
-                            Console.WriteLine($"Osperà ha preso la somma\n");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write($"Osperà");
+                            Console.ResetColor();
+                            Console.WriteLine($" ha preso la somma\n");
                             break;
                         case 1:
-                            Console.WriteLine($"Osperà ha pigliato un numero\n");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write($"Osperà");
+                            Console.ResetColor();
+                            Console.WriteLine($" ha pigliato un numero\n");
                             break;
                     }
-                    
+
+                    //se osperà indovina qualcosa, si avvisa al giocatore di quanto viene aumentato il punteggio
+                    if (assPunt > 0)
+                    {
+                        Thread.Sleep(meTime);
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write("Osperà");
+                        Console.ResetColor();
+                        Console.Write(" ti da ");
+                        Thread.Sleep(meTime);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(assPunt);
+                        Console.ResetColor();
+                        Console.Write(" punti insieme ai tuoi ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(punto);
+                        Console.ResetColor();
+                        Console.WriteLine(" punti\n");
+                    }
+                    //altrimenti, niente...
+                    else
+                    {
+                        Thread.Sleep(meTime);
+                        Console.Write("Stavolta ");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write("Osperà");
+                        Console.ResetColor();
+                        Console.WriteLine(" non è riuscito a trovare niente...\n");
+                    }
 
                     //si aggiunge il punteggio subito stavolta
                     //in futuro però vorrei vedere un modo per ripetere l'utilizzo di Osperà, col costo di punti
-                    totPunto+=punto;
+                    totPunto += assPunt;
                 }
 
+
+
+                //si tiene presente al giocatore quanto si ha di punteggio totale
                 Console.Write("Il tuo punteggio totale sta a ");
-                Console.ForegroundColor=ConsoleColor.Yellow;
-                Console.WriteLine($"{totPunto}");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"{totPunto}\n");
                 Console.ResetColor();
+
+            }
+
+                //Scrittura dei dati in una variabile, per poi salvarli verso la fine del turno...
+                //cambio piano, lo faccio salvare subito
+                datiSave[3] = maxTurn.ToString();
+                datiSave[5]= totPunto.ToString();
+                datiSave[7]= false.ToString();
+                File.WriteAllLines(pathSave, datiSave);
+
+
+            Console.WriteLine("\nVuoi Fare un altra partita?\n(Premi S per si, N per no)");
+        Ricomincia:
+            ConsoleKeyInfo risposta = Console.ReadKey(true);
+            if (risposta.Key == ConsoleKey.S)
+            {
+                Console.WriteLine($"\nAight...");
+                Thread.Sleep(meTime * 2);
+                Console.Clear();
+            }
+            else if (risposta.Key == ConsoleKey.N)
+            {
+                Console.WriteLine($"\nGrazie per aver giocato ad 'Indovina, Osperà'");
+                end = true;
+            }
+            else
+            {
+                Console.WriteLine("Avrei bisogno di sapere se Si o No...");
+                goto Ricomincia;
             }
         }
     }
