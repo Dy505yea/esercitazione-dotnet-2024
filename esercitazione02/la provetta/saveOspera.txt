@@ -1,8 +1,8 @@
 Nome
-l
+Player
 Turno
-0
+2
 Punteggio Totale
-0
+21
 WIP?
-False
+True

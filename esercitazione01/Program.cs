@@ -2,23 +2,27 @@
 {
     static void Main(string[] args)
     {
-        Console.Clear();
-        string path=@"..\esercitazione01\provadicsv\jason.csv";
-        string[] lines=File.ReadAllLines(path);//a differenza di un file di testo, pare che ogni linea sia un array, generando quindi una matrice invece di un solo array
-        string[][] nomi= new string[lines.Length][];//per questo motivo, per copiare il testo, si necessita di una matrice di string
-        for(int i=0; i<lines.Length; i++)
+        int a=0;
+        int b=0;
+        Console.WriteLine($"Ammira come cambio {a} e {b} con una funzione");
+        (a, b)=OneIntoTwo(2);
+        Console.WriteLine($"Ecco a voi...   I NUOVI A E B: {a}, {b}");
+    }
+
+    static (int, int) OneIntoTwo(int numero)
+    {
+        int picco=0;
+        int seco=0;
+        if(numero%2==0)
         {
-            nomi[i]=lines[i].Split("|");//uno può utilizzare ciò che vuole, ma è alquanto importante decidere cosa usare per via della memoria usata per lo split in base al carattere
+            picco=numero/2;
+            seco=numero*2;
         }
-        foreach(string[] nome in nomi)
+        else
         {
-            string path2=@"..\esercitazione01\provadicsv\"+nome[0]+".csv";
-            File.Create(path2).Close();
-            for(int i=1; i<nome.Length; i++)
-            {
-                File.AppendAllText(path2, nome[i]+"\n");
-            }
+            picco=numero;
+            seco=numero;
         }
-        //File.Delete("nome.csv");
+        return (picco, seco);
     }
 }

@@ -405,12 +405,13 @@ class Program
                     Thread.Sleep(meTime);
 
 
-                    Console.Write($"Congrats, puoi portarti a casa ");
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Thread.Sleep(meTime);
-                    Console.Write(punto);
-                    Console.ResetColor();
-                    Console.WriteLine($" punti... oppure vuoi provare a vedere cosa tira fuori l'assistente al costo della metà dei tuoi punti?");
+                    pathText=@"csvsenteces\giocaVince.csv";
+                    stampaNumero[0]=3;
+                    if(!StampaTestoCsv(pathText, 0, stampaNumero))
+                    {
+                        return;
+                    }
+
                     Console.WriteLine($"(1 per rivelare l'assistente, 2 per tenerti i punti)");
 
 
@@ -433,16 +434,19 @@ class Program
                 else
                 {
                     //si dà il messsaggio per avvisarlo e chiedere se vuole vedere se magari l'assistente li da un qualche punto
-                    Console.Write($"Uf, pare che la fortuna non sia dalla tua parte, puoi sempre sperare in ");
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.Write($"Osperà");
-                    Console.ResetColor();
-                    Console.WriteLine($", se vuoi");
+                    pathText=@"csvsenteces\giocaPerde.csv";
+                    if(!StampaTestoCsv(pathText, 0))
+                    {
+                        return;
+                    }
+
+
                     Console.Write($"(1 per rivelare i dadi ");
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write($"Osperà");
                     Console.ResetColor();
                     Console.WriteLine($", 2 per gettare la spugna)");
+
                     reveal=ReplyIntRange("(Ti ho richiesto 1 o 2)", "Unfortunately, non ho altre opzioni", 1, 2);
                     //ma se per qualche strana ragione il giocatore non abbia voglia, si esprime la sorpresa di questa strana decisione
                     if (reveal == 2)
@@ -551,49 +555,19 @@ class Program
                             critica = 4;
                         }
                     }
+                    
+
+                    //debug
+                    critica=Convert.ToInt32(Console.ReadLine());
+                    
+                    pathText=@"csvsenteces\ospeVince0"+critica+".csv";
+                    if(!StampaTestoCsv(pathText, 0))
+                    {
+                        return;
+                    }
+                    
                     //reazioni in base a quanto ha azzeccato il giocatore
                     Thread.Sleep(meTime);
-                    switch (critica)
-                    {
-                        case 6:
-                            Console.Write($"HOLYMARYMOTHEROFJOSEPH, ");
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write($"OSPERÀ");
-                            Console.ResetColor();
-                            Console.WriteLine($" HA TROVATO AMBO I DOPPIONI\n");
-                            break;
-                        case 5:
-                            Console.Write($"Wow, ");
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write($"Osperà");
-                            Console.ResetColor();
-                            Console.WriteLine($" ha indovinato sia base che la somma\n");
-                            break;
-                        case 4:
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write($"Osperàsmus");
-                            Console.ResetColor();
-                            Console.WriteLine($" ha previsto la doppia somma\n");
-                            break;
-                        case 3:
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write($"Osperà");
-                            Console.ResetColor();
-                            Console.WriteLine($" è il nuovo cupido, ha trovato 2 single doppioni\n");
-                            break;
-                        case 2:
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write($"Osperà");
-                            Console.ResetColor();
-                            Console.WriteLine($" ha preso la somma\n");
-                            break;
-                        case 1:
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write($"Osperà");
-                            Console.ResetColor();
-                            Console.WriteLine($" ha pigliato un numero\n");
-                            break;
-                    }
 
                     //se osperà indovina qualcosa, si avvisa al giocatore di quanto viene aumentato il punteggio
                     if (assPunt > 0)
@@ -674,16 +648,12 @@ class Program
             end=Accettare("\nAight...", "\nGrazie per aver giocato ad 'Indovina, Osperà'", "Avrei bisogno di sapere se Si o No...", true);
         }
     }
-    /*
-    Variabile int a mo di array
-    il contatore per far circolare fino alla fine dell'array deve aumentare solo nel caso sostituisca qualcosa
-    magari una stampa diretta invece di sostituire robe nel file
-    il check deve beccare una specifica stringa che non verrà mai usata normalmente.. o almeno non in italiano/inglese
-    la funzione non deve toccare se non c'è proprio questo array
-    */
+
+
     static bool StampaTestoCsv(string path, int altern)
     //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
     {
+        //diversi trycatch per sapere che tipo di errore è accaduto in tutto ciò
         try
         {
             try
@@ -802,30 +772,42 @@ class Program
         return true;
     }
 
+    //Funzione per leggere qualsiasi numero che sia compreso in un certo range, con dei commenti personalizzabili
     static int ReplyIntRange(string stufo, string fuoriRange, int min, int max)
     {
+        //bool per uscire dal while in modo normale
         bool done=false;
+        //il numero inserito
         int reply=0;
         while(!done)
         {
+            //done verrà sempre cambiato, in modo da uscire finchè non accade un errore
             done=true;
+            //try catch per evitare che l'utente digiti qualcosa che non sia un numero
             try
             {
                 reply = Convert.ToInt32(Console.ReadLine());
+                //stampa del messaggio per dire che non è nel range il numero scelto
                 if (reply < min || reply > max)
                 {
                     Console.WriteLine(fuoriRange);
+                    //si rimane dentro al ciclo
+                    done=false;
                 }
-                done=false;
             }
+            //potrei modificarlo er renderlo esclusivo del problema di conversione
             catch
             {
+                //si indica all'utente che il programma necessita di un NUMERO
                 Console.WriteLine(stufo);
+                //rimane dentro al ciclo per questo
                 done=false;
             }
         }
+        //ritorna il numero digitato
         return reply;
     }
+    //Versione con una condizione in più: un numero da evitare all'interno del range ed un nuovo messaggio d'errore customizzabile
     static int ReplyIntRange(string stufo, string fuoriRange, string paradosso, int min, int max, int original)
     {
         bool done=false;
@@ -839,13 +821,15 @@ class Program
                 if (reply < min || reply > max)
                 {
                     Console.WriteLine(fuoriRange);
+                    done=false;
                 }
                 else
+                //messo in un if diverso essendo un errore di tipo diverso
                 if(original==reply)
                 {
                     Console.WriteLine(paradosso);
+                    done=false;
                 }
-                done=false;
             }
             catch
             {
@@ -856,13 +840,16 @@ class Program
         return reply;
     }
 
-//Funzione che restituisce un bool, nel quarto parametro si deve mettere true o false che indica se si vuole usare la risposta S da tastiera
-//per invece negare il return
+    //Funzione che restituisce un bool, nel quarto parametro si deve mettere true o false che indica se si vuole usare la risposta S da tastiera
+    //per invece ritornare false
     static bool Accettare(string good, string fine, string again, bool reverse)
     {
+        //dichiarazione del bool accetta
         bool accetta=false;
+        //il while deve essere forzatamente terminato
         while(true)
         {
+            //si attende un input da tastiera
             ConsoleKeyInfo risposta = Console.ReadKey(true);
             if (risposta.Key == ConsoleKey.S)
             {
