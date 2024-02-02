@@ -2,75 +2,7 @@
 
 class Program
 {
-    /*
-    Variabile int a mo di array
-    il contatore per far circolare fino alla fine dell'array deve aumentare solo nel caso sostituisca qualcosa
-    magari una stampa diretta invece di sostituire robe nel file
-    il check deve beccare una specifica stringa che non verrà mai usata normalmente.. o almeno non in italiano/inglese
-    la funzione non deve toccare se non c'è proprio questo array
-    */
-    private static bool StampaTestoCsv(string path, int altern, params float[] values)
-    //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
-    {
-        try
-        {
-            try
-            {
-                string[] trova = File.ReadAllLines(path);
-                string[][] prova = new string[trova.Length][];
-                for (int i = 0; i < trova.Length; i++)
-                {
-                    prova[i] = trova[i].Split("|");//uno può utilizzare ciò che vuole, ma è alquanto importante decidere cosa usare per via della memoria usata per lo split in base al carattere
-                }
-                int count = 0;
-                for (int i = 0; i < prova.Length; i++)
-                {
-                    if (prova[i][0].Trim() == "pABLO" && count < values.Length)
-                    {
-                        prova[i][0] = values[count].ToString();
-                        count++;
-                    }
-                    if (Convert.ToInt32(prova[i][3]) == altern)
-                    {
-                        switch (Convert.ToInt32(prova[i][1]))
-                        {
-                            case 0:
-                                Console.ResetColor();
-                                break;
-                            case 1:
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                                break;
-                            case 2:
-                                Console.ForegroundColor = ConsoleColor.Cyan;
-                                break;
-                            case 3:
-                                Console.ForegroundColor = ConsoleColor.Magenta;
-                                break;
-                            default:
-                                Console.WriteLine("Devi riscrivere i file, c'è qualcosa di strano in quel che ho letto");
-                                return false;
-                        }
-                        Console.Write(prova[i][0]);
-                        for (int l = 0; l < Convert.ToInt32(prova[i][2]); l++)
-                            Console.Write("\n");
-                    }
-                }
-                Console.ResetColor();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Riconfigura il codice o il file, qui c'è qualcosa di dannatamente sbagliato\n" + ex.Message);
-                return false;
-            }
-        }
-        catch
-        {
-            Console.WriteLine("Sorry to break it to ya, but your whole team paid me to do this");
-            return false;
-        }
-
-        return true;
-    }
+    
     static void Main(string[] args)
     {
         //Indovina, Osperà!
@@ -152,8 +84,11 @@ class Program
         float asSum = (float)Math.Ceiling(sumBasic - sumBasic / 4);
         //punteggio minimo per effettivamente vincere
         float vinPunt = sumBasic * maxTurn;
-        //costo in punti per far tirare nuovamente ad Osperà
+        //costo in punti per far tirare nuovamente ad Osperà, metà dei punti per base
         float pricePunt = (float)Math.Round(basic / 2);
+
+        //array di float usato per stampare insieme al file csv
+        float[] stampaNumero= new float[1];
         //usato meramente per debug
         int meTime = 500;
 
@@ -267,22 +202,7 @@ class Program
             if (!rule)
             {
                 Console.WriteLine("Vuoi sentire le regole?\n(S per si, N per no)");
-            Rispiega:
-                ConsoleKeyInfo reply = Console.ReadKey(true);
-                if (reply.Key == ConsoleKey.S)
-                {
-                    Console.WriteLine($"Fammi rileggere...");
-                    rule = true;
-                }
-                else if (reply.Key == ConsoleKey.N)
-                {
-                    Console.WriteLine($"Ok");
-                }
-                else
-                {
-                    Console.WriteLine("Avrei bisogno di sapere se Si o No...");
-                    goto Rispiega;
-                }
+                rule=Accettare("Fammi rileggere...", "Ok", "Avrei bisogno di sapere se Si o No...", false);
                 Thread.Sleep(meTime * 2);
                 Console.Clear();
             }
@@ -292,8 +212,12 @@ class Program
             {
                 pathText = @"..\esercitazione02\csvsenteces\regoleOspera.csv";
                 //Regolamento, una lunga serie di print
-                float[] valori = { basic, sumBasic, basic * 3, assBas, asSum, sumBasic + (float)Math.Truncate(sumBasic / 2), (float)Math.Truncate((basic * 2) + (basic / 2)), asSum + (float)Math.Truncate(asSum / 2), (float)Math.Truncate((assBas * 2) + (assBas / 2)) };
-                allGood = StampaTestoCsv(pathText, 0, valori);
+                float[] valori = { basic, sumBasic, basic * 3, assBas, asSum,
+                                    sumBasic + (float)Math.Truncate(sumBasic / 2), (float)Math.Truncate((basic * 2) + (basic / 2)),
+                                    asSum + (float)Math.Truncate(asSum / 2), (float)Math.Truncate((assBas * 2) + (assBas / 2)) };
+                Array.Resize(ref stampaNumero, valori.Length);
+                Array.Copy(valori, stampaNumero, valori.Length);
+                allGood = StampaTestoCsv(pathText, 0, stampaNumero);
                 if (!allGood)
                 {
                     return;
@@ -330,52 +254,18 @@ class Program
                 Random ran = new Random();
                 Thread.Sleep(meTime);
                 Console.WriteLine($"{i + 1}° turno\n\nInserisci il numero base");
-                Thread.Sleep(meTime);
-            SelezioneBase:
-                //tentativo per indovinare un numero base da parte del giocatore
-                try
-                {
-                    guess = Convert.ToInt32(Console.ReadLine());
-                    //ritorno alla lettura da tastiera se il numero non è entro le facce del dado
-                    if (guess < 1 || guess > 6)
-                    {
-                        Console.WriteLine("Non stiamo giocando a qualcosa come DnD, le facce son solo 6 e richiedo un numero da 1 a 6");
-                        goto SelezioneBase;
-                    }
-                }
-                catch
-                {
-                    //per ovviare al possibile errore se il giocatore scrive un altra cosa invece di un numero
-                    Console.WriteLine("Sarebbe strano trovare delle parole sui dadi, necessito un numero... da 1 a 6");
-                    goto SelezioneBase;
-                }
+
+                
+                guess=ReplyIntRange("Non stiamo giocando a qualcosa come DnD, le facce son solo 6 e richiedo un numero da 1 a 6", 
+                                    "Sarebbe strano trovare delle parole sui dadi, necessito un numero... da 1 a 6", 1, 6);
                 Console.WriteLine("Inserisci la somma... o un altro numero base");
-            SelezioneSomma:
-                //tentativo per indovinare una somma da parte del giocatore
-                try
-                {
-                    //procedimento simile alla selezione del numero base
-                    sumGuess = Convert.ToInt32(Console.ReadLine());
-                    if (sumGuess < 1 || sumGuess > 12)
-                    {
-                        Console.WriteLine("Richiedo o la somma di 2 dadi o un altro numero base, dimmene un altra");
-                        goto SelezioneSomma;
-                    }
-                    //ma c'è un ulteriore controllo che il giocatore non abbia scelto lo stesso numero
-                    if (guess == sumGuess)
-                    {
-                        Console.WriteLine("Deve essere diverso dalla tua prima scelta");
-                        goto SelezioneSomma;
-                    }
-                }
-                catch
-                {
-                    Console.WriteLine("Sarebbe strano trovare delle parole sui dadi, necessito un numero... da 1 a 12");
-                    goto SelezioneSomma;
-                }
 
 
-                //si tirano sia i dadi assist che i dadi haunted
+                sumGuess=ReplyIntRange("Richiedo o la somma di 2 dadi o un altro numero base, dimmene un altra", 
+                                    "Sarebbe strano trovare delle parole sui dadi, necessito un numero... da 1 a 12", 
+                                    "Deve essere diverso dalla tua prima scelta", 1, 12, guess);
+
+                //si tirano sia i dadi assist che i dadispera
                 for (int l = 0; l < dadAss.Length; l++)
                 {
                     dadAss[l] = ran.Next(1, 7);
@@ -384,8 +274,10 @@ class Program
                 {
                     dadisp[l] = ran.Next(1, 7);
                 }
-                //ma solo i dadi haunted vengono rivelati
+
+                //ma solo i dadispera vengono rivelati
                 Thread.Sleep(meTime);
+                
                 Console.Write($"Ecco a te i ");
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine($"Dadispera\n\n\t{dadisp[0]}\t{dadisp[1]}\t{dadisp[2]}\t{dadisp[3]}\n");
@@ -398,6 +290,10 @@ class Program
                 bool gotDoubleOne = false;
                 bool gotDoubleSome = false;
                 critica = 0;
+
+                
+
+                
                 //li si controlla uno ad uno
                 for (int l = 0; l < dadisp.Length; l++)
                 {
@@ -505,9 +401,10 @@ class Program
                 //in caso il giocatore avesse indovinato, li si chiede se vuole rischiare anche solo per vedere cosa aveva l'assistente
                 if (punto > 0)
                 {
-                    reveal = 0;
                     //si avvisa di quanti punti ha e del rischio in caso si volesse vedere che cosa hanno i dadi assistenti
                     Thread.Sleep(meTime);
+
+
                     Console.Write($"Congrats, puoi portarti a casa ");
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Thread.Sleep(meTime);
@@ -515,21 +412,9 @@ class Program
                     Console.ResetColor();
                     Console.WriteLine($" punti... oppure vuoi provare a vedere cosa tira fuori l'assistente al costo della metà dei tuoi punti?");
                     Console.WriteLine($"(1 per rivelare l'assistente, 2 per tenerti i punti)");
-                DecisioneRischio:
-                    try
-                    {
-                        reveal = Convert.ToInt32(Console.ReadLine());
-                        if (reveal < 1 || reveal > 2)
-                        {
-                            Console.WriteLine("Unfortunately, non ho altre opzioni");
-                            goto DecisioneRischio;
-                        }
-                    }
-                    catch
-                    {
-                        Console.WriteLine("(Ti ho richiesto 1 o 2)");
-                        goto DecisioneRischio;
-                    }
+
+
+                    reveal=ReplyIntRange("(Ti ho richiesto 1 o 2)", "Unfortunately, non ho altre opzioni", 1, 2);
                     //se accetta il rischio, si dimezza di già il punteggio, il target è solo cò che ha indovinato il giocatore, non i dadi
                     if (reveal == 1)
                     {
@@ -558,22 +443,7 @@ class Program
                     Console.Write($"Osperà");
                     Console.ResetColor();
                     Console.WriteLine($", 2 per gettare la spugna)");
-                    reveal = 0;
-                VuoiContinuare:
-                    try
-                    {
-                        reveal = Convert.ToInt32(Console.ReadLine());
-                        if (reveal < 1 || reveal > 2)
-                        {
-                            Console.WriteLine("Unfortunately, non ho altre opzioni");
-                            goto VuoiContinuare;
-                        }
-                    }
-                    catch
-                    {
-                        Console.WriteLine("(Ti ho richiesto 1 o 2)");
-                        goto VuoiContinuare;
-                    }
+                    reveal=ReplyIntRange("(Ti ho richiesto 1 o 2)", "Unfortunately, non ho altre opzioni", 1, 2);
                     //ma se per qualche strana ragione il giocatore non abbia voglia, si esprime la sorpresa di questa strana decisione
                     if (reveal == 2)
                     {
@@ -642,8 +512,6 @@ class Program
                             }
                         }
                     }
-
-
 
                     if (gotOne)
                     {
@@ -803,24 +671,216 @@ class Program
 
 
             Console.WriteLine("\nVuoi Fare un altra partita?\n(Premi S per si, N per no)");
-        Ricomincia:
+            end=Accettare("\nAight...", "\nGrazie per aver giocato ad 'Indovina, Osperà'", "Avrei bisogno di sapere se Si o No...", true);
+        }
+    }
+    /*
+    Variabile int a mo di array
+    il contatore per far circolare fino alla fine dell'array deve aumentare solo nel caso sostituisca qualcosa
+    magari una stampa diretta invece di sostituire robe nel file
+    il check deve beccare una specifica stringa che non verrà mai usata normalmente.. o almeno non in italiano/inglese
+    la funzione non deve toccare se non c'è proprio questo array
+    */
+    static bool StampaTestoCsv(string path, int altern)
+    //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
+    {
+        try
+        {
+            try
+            {
+                string[] trova = File.ReadAllLines(path);
+                string[][] prova = new string[trova.Length][];
+                for (int i = 0; i < trova.Length; i++)
+                {
+                    prova[i] = trova[i].Split("|");//uno può utilizzare ciò che vuole, ma è alquanto importante decidere cosa usare per via della memoria usata per lo split in base al carattere
+                }
+                for (int i = 0; i < prova.Length; i++)
+                {
+                    if (Convert.ToInt32(prova[i][3]) == altern)
+                    {
+                        switch (Convert.ToInt32(prova[i][1]))
+                        {
+                            case 0:
+                                Console.ResetColor();
+                                break;
+                            case 1:
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                break;
+                            case 2:
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                break;
+                            case 3:
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                break;
+                            default:
+                                Console.WriteLine("Devi riscrivere i file, c'è qualcosa di strano in quel che ho letto");
+                                return false;
+                        }
+                        Console.Write(prova[i][0]);
+                        for (int l = 0; l < Convert.ToInt32(prova[i][2]); l++)
+                            Console.Write("\n");
+                    }
+                }
+                Console.ResetColor();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Riconfigura il codice o il file, qui c'è qualcosa di dannatamente sbagliato\n" + ex.Message);
+                return false;
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Sorry to break it to ya, but your whole team paid me to do this");
+            return false;
+        }
+
+        return true;
+    }
+    
+    //versione con array di float, in caso servisse stampare dei numeri variabili, prettamente di tipo float
+    static bool StampaTestoCsv(string path, int altern, params float[] values)
+    //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
+    {
+        try
+        {
+            try
+            {
+                string[] trova = File.ReadAllLines(path);
+                string[][] prova = new string[trova.Length][];
+                for (int i = 0; i < trova.Length; i++)
+                {
+                    prova[i] = trova[i].Split("|");//uno può utilizzare ciò che vuole, ma è alquanto importante decidere cosa usare per via della memoria usata per lo split in base al carattere
+                }
+                int count = 0;
+                for (int i = 0; i < prova.Length; i++)
+                {
+                    if (prova[i][0].Trim() == "pABLO" && count < values.Length)
+                    {
+                        prova[i][0] = values[count].ToString();
+                        count++;
+                    }
+                    if (Convert.ToInt32(prova[i][3]) == altern)
+                    {
+                        switch (Convert.ToInt32(prova[i][1]))
+                        {
+                            case 0:
+                                Console.ResetColor();
+                                break;
+                            case 1:
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                break;
+                            case 2:
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                break;
+                            case 3:
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                break;
+                            default:
+                                Console.WriteLine("Devi riscrivere i file, c'è qualcosa di strano in quel che ho letto");
+                                return false;
+                        }
+                        Console.Write(prova[i][0]);
+                        for (int l = 0; l < Convert.ToInt32(prova[i][2]); l++)
+                            Console.Write("\n");
+                    }
+                }
+                Console.ResetColor();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Riconfigura il codice o il file, qui c'è qualcosa di dannatamente sbagliato\n" + ex.Message);
+                return false;
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Sorry to break it to ya, but your whole team paid me to do this");
+            return false;
+        }
+
+        return true;
+    }
+
+    static int ReplyIntRange(string stufo, string fuoriRange, int min, int max)
+    {
+        bool done=false;
+        int reply=0;
+        while(!done)
+        {
+            done=true;
+            try
+            {
+                reply = Convert.ToInt32(Console.ReadLine());
+                if (reply < min || reply > max)
+                {
+                    Console.WriteLine(fuoriRange);
+                }
+                done=false;
+            }
+            catch
+            {
+                Console.WriteLine(stufo);
+                done=false;
+            }
+        }
+        return reply;
+    }
+    static int ReplyIntRange(string stufo, string fuoriRange, string paradosso, int min, int max, int original)
+    {
+        bool done=false;
+        int reply=0;
+        while(!done)
+        {
+            done=true;
+            try
+            {
+                reply = Convert.ToInt32(Console.ReadLine());
+                if (reply < min || reply > max)
+                {
+                    Console.WriteLine(fuoriRange);
+                }
+                else
+                if(original==reply)
+                {
+                    Console.WriteLine(paradosso);
+                }
+                done=false;
+            }
+            catch
+            {
+                Console.WriteLine(stufo);
+                done=false;
+            }
+        }
+        return reply;
+    }
+
+//Funzione che restituisce un bool, nel quarto parametro si deve mettere true o false che indica se si vuole usare la risposta S da tastiera
+//per invece negare il return
+    static bool Accettare(string good, string fine, string again, bool reverse)
+    {
+        bool accetta=false;
+        while(true)
+        {
             ConsoleKeyInfo risposta = Console.ReadKey(true);
             if (risposta.Key == ConsoleKey.S)
             {
-                Console.WriteLine($"\nAight...");
-                Thread.Sleep(meTime * 2);
-                Console.Clear();
+                Console.WriteLine(good);
+                accetta=!reverse;
+                break;
             }
             else if (risposta.Key == ConsoleKey.N)
             {
-                Console.WriteLine($"\nGrazie per aver giocato ad 'Indovina, Osperà'");
-                end = true;
+                Console.WriteLine(fine);
+                accetta = reverse;
+                break;
             }
             else
             {
-                Console.WriteLine("Avrei bisogno di sapere se Si o No...");
-                goto Ricomincia;
+                Console.WriteLine(again);
             }
         }
+        return accetta;
     }
 }

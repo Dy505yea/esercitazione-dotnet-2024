@@ -1,8 +1,8 @@
 Nome
-f
+l
 Turno
-1
+0
 Punteggio Totale
-10
+0
 WIP?
 False
