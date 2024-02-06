@@ -13,3 +13,6 @@ C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazi
 C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.pdb
 C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.genruntimeconfig.cache
 C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\ref\esercitazione01.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.csproj.AssemblyReference.cache
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\esercitazione01\obj\Debug\net8.0\esercitazione01.csproj.CopyComplete

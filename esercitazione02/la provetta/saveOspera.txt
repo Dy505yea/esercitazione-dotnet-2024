@@ -1,8 +1,0 @@
-Nome
-Player
-Turno
-2
-Punteggio Totale
-21
-WIP?
-True

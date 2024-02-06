@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "mkddVyXsGEkuQwwHv3jliJ5rV+KRdoHjq6Juss5AyMFkBbXmAuqUtWI6amvAOkib7wkIZivnE3Zj/69SRcl3YQ==",
+  "dgSpecHash": "yil9PXi9xfmBRMskx+41xQPjdP8FDZ6RuRTPIqbORmTqk7nimgacVj1w3dKxrPMJXjrG56aFO6+/P6zU4bnX2Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\DOTNET\\Documents\\Corso-Dotnet-2024\\esercitazione-dotnet-2024\\esercitazione01\\esercitazione01.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\DOTNET\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
