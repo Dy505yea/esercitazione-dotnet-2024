@@ -1,0 +1,8 @@
+Nome
+Player
+Turno
+3
+Punteggio Totale
+30
+WIP?
+True
