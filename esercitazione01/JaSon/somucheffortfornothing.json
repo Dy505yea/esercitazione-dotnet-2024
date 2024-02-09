@@ -1,0 +1,20 @@
+[
+    {
+        "nome": "unpaid",
+        "cognome": "pain",
+        "eta": 9,
+        "indirizzo": {
+            "via": "un mero giochino di dadi",
+            "citta": "un semplice programmino"
+        }
+    },
+    {
+        "nome": "coping",
+        "cognome": "mechanism",
+        "eta": 13,
+        "indirizzo": {
+            "via": "dormire",
+            "citta": "bisogni estremamente primari"
+        }
+    }
+]

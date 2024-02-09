@@ -95,7 +95,7 @@ class Program
 
         //prova di apertura di un file... altrimenti se ne crea uno nuovo
         //path del file di salvataggio
-        string pathSave = @"..\esercitazione02\la provetta\saveOspera.txt";
+        string pathSave = @"salvataggio\saveOspera.txt";
         if (!File.Exists(pathSave))
         {
             File.Create(pathSave).Close();
@@ -373,28 +373,15 @@ class Program
                         critica = 4;
                     }
                 }
+
+                //la critica indica quale file verrà stampato, ogni file avrà tot numeri di alternative, per rendere meno ripetitivi le reazioni
+                pathText = @"csvsenteces\giocaVince0" + critica + ".csv";
+                
                 //reazioni in base a quanto ha azzeccato il giocatore
                 Thread.Sleep(meTime);
-                switch (critica)
+                if(!StampaTestoCsv(pathText, 0))
                 {
-                    case 6:
-                        Console.WriteLine($"HOLY MOLY, HAI BECCATO SIA IL BASE CHE LA SOMMA COME DOPPIONI!!!\n");
-                        break;
-                    case 5:
-                        Console.WriteLine($"Sheesh, hai beccato sia somma che base\n");
-                        break;
-                    case 4:
-                        Console.WriteLine($"Would ya look at that, hai pigliato 2 somme uguali\n");
-                        break;
-                    case 3:
-                        Console.WriteLine($"Ed ecco a voi 2 single mooooolto simili\n");
-                        break;
-                    case 2:
-                        Console.WriteLine($"Somma centrata\n");
-                        break;
-                    case 1:
-                        Console.WriteLine($"Hai indovinato\n");
-                        break;
+                    return;
                 }
 
 
@@ -558,7 +545,7 @@ class Program
 
 
                     //debug
-                    critica = Convert.ToInt32(Console.ReadLine());
+                    //critica = Convert.ToInt32(Console.ReadLine());
 
                     pathText = @"csvsenteces\ospeVince0" + critica + ".csv";
                     if (!StampaTestoCsv(pathText, 0))
@@ -709,7 +696,7 @@ class Program
     }
 
     //versione con array di float, in caso servisse stampare dei numeri variabili, prettamente di tipo float
-    static bool StampaTestoCsv(string path, int altern, params float[] values)
+    static bool StampaTestoCsv(string path, int altern, float[] values)
     //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
     {
         //try catch in caso qualche errore accada

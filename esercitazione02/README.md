@@ -43,7 +43,9 @@ Il giocatore vince se arriva ad un certo punteggio alla fine dei turni</p>
 - [x] Il punteggio deve rimanere presente, in modo che l'utente tenga presente di quanto ha
 - [ ] Ogni qualvolta, si ricorda al giocatore quanti punti necessita per effettivamente vincere
 
-## Definizione del file
+## Definizione dei file
+
+### salvaOspera.txt
 
 - Essendo un salvataggio per necessità, lo scopo è solo di permettere al giocatore di finire la partita se per qualche motivo la partita è crashata
 
@@ -52,6 +54,15 @@ Il giocatore vince se arriva ad un certo punteggio alla fine dei turni</p>
 - [x] Punteggio totale
 - [x] Boolean per sapere se la partita era in corso o meno
 > - [ ] (Facoltativo) Magari una cronologia del punteggio, che duri nel tempo o solo per confrontare in un periodo di tempo breve (stessa partita)
+
+### I csv
+
+- Son prescritti, è necessario la loro presenza perchè contengono:
+
+- [x] Testo
+- [x] Colore
+- [x] Quanti spazi a capo si aggiungeranno dopo la stampa
+- [x] Alternativa: ci saranno diverse alternative in modo da rendere i commenti da parte del computer meno ripetitivi
 
 ## Possibili migliorie future
 
