@@ -1,0 +1,175 @@
+/*
+Qui modificherai diverse cose in base al nome
+per esempio body riguarda al corpo
+*/
+
+body {
+    /*margin riguarda alla posizione orizzontale*/
+    margin: 80px;
+    /*padding sembra essere collegato alle estremità, dando spazio sia sopra che sotto*/
+    padding: 80px;
+    font-family: Arial;
+    font-size: large;
+}
+
+header {
+    /*ci son diversi modi per specificare un colore*/
+    background-color: bisque;
+    color: black;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    /*aggiungendo padding, si è aumentato il riquadro del titolo*/
+    padding: 20px;
+    /*arrotonda le punte della sezione*/
+    /*border-radius: 40px;*/
+}
+
+/*qui si tratta della parte di navigazione, dove te clicchi per poter andare da una parte o un altra*/
+nav {
+    background-color: rgb(160, 17, 17);
+    color: white;
+    text-align: center;
+    font-family: 'Times New Roman';
+    padding: 20px;
+}
+
+/*la scritta di ciò*/
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 20px;
+}
+
+nav a :hover{
+    background-color: white;
+    color: black;
+}
+
+section {
+    /*i comandi flex aiutano a ingrandire o diminuire in base alla grandezza della finestra*/
+    display: flex;
+    flex-direction: column;
+    /*vediti quando puoi a aprte i padding e border*/
+    padding-top: 20px;
+    padding-bottom: 40px;
+    border-bottom: 3px solid pink;
+}
+
+/*riguardo alle linee*/
+hr {
+    border-style: solid;
+    width: 100%;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*riguardo alle varie immagini*/
+img {
+    display:block;
+    margin: 20px;
+}
+
+h2 {
+    /*modo in cui il browser cercherà di impostare nello spazio*/
+  text-align: justify;
+  line-height: 1.5;
+  /*identazione*/
+  text-indent: 20px;
+}
+p {
+  line-height: 1.5;
+  text-indent: 20px;
+}
+
+/*da controllare cosa effettivamente modifichi*/
+header p {
+    text-align: center;
+    text-indent: 0;
+}
+
+
+ul {
+    /*imposta cosa mettere dove dovrebbero stare i punti*/
+  list-style-type: none;
+}
+
+li {
+  text-align:justify;
+}
+
+/*qui viene ben ordinata la tabella, finisce in td e th*/
+table {
+  border: 1px solid red;
+}
+
+div {
+  border: 1px solid rgb(0, 0, 0);
+  padding: 30px;
+  margin: 25px 0;
+}
+
+
+td, th {
+  border: 1px solid black;
+  text-align: center;
+  padding: 5px;
+  height: 100px;
+}
+
+/*area dove dovrebbe esserci la sezione dove l'utente può interagire in altri modi con la pagina*/
+
+input,
+textarea
+{
+  padding: 10px 20px;
+  margin: 10px;
+}
+
+select 
+{
+  padding: 10px 65px;
+  margin: 10px;
+}
+
+/*3 parti personalizzate, in questo caso 3 colori*/
+.color-a{
+  background-color: rgb(213, 59, 20);
+}
+.color-b{
+  background-color: rgb(92, 147, 173);
+}
+.color-c{
+  background-color: rgb(231, 183, 25);
+}
+
+/*queste ultime due cose son da studiarle, ma dovrebbero servire a riposizionare un pò il tutto*/
+
+#centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#last {
+  margin-bottom: 40px;
+}
+
+@media (max-width: 768) {
+    header {
+        background-color: #1266;
+    }
+    body {
+        background-color: #666;
+    }
+    nav {
+        font-size: small;
+    }
+}

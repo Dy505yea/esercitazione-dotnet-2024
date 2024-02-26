@@ -1,0 +1,12 @@
+database contenente:
+
+- id
+- nome 
+- prezzo
+- quantità
+- id_categoria
+
+con una tabella di categorie:
+
+- id
+- nome

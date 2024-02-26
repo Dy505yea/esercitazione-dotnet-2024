@@ -1,0 +1,1 @@
+SELECT * FROM merce JOIN categorie ON merce.id_categoria = categorie.id;

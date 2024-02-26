@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!-- il doctype è necessario -->
+<html lang="en">
+
+<!--Varie cose nel titolo dove vedi le schede-->
+
+<head>
+    <title>Titolo dentro head</title>
+    <!--Modo per poter usare il css per varie aggiunte grafiche-->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!--Corpo-->
+
+<body>
+    <!--Titolo dentro la pagina-->
+    <header>
+        <h1>What... ah è il vero titolo</h1>
+        <!-- Credo io sia un commento -->
+        <!-- <h2>Header2</h2> -->
+        <p>Che ne sapevo</p>
+        <!-- <h4>Header2</h4> -->
+        <!-- <h5>Header2</h5> -->
+    </header>
+
+    <!--credo sia la navigazione-->
+    <nav>
+        <!--Ogni link è associato a qualcosa che poi puoi decidere successivamente dove mettere-->
+        <a href="#">link</a>
+        <a href="#section1">Sezione 1</a>
+        <a href="#section2">Sezione 2</a>
+        <a href="#section3">Sezione 3</a>
+        <a href="#section4">Sezione 4</a>
+    </nav>
+
+    <!--nu blocco di contenuti-->
+    <div id="centro">
+        <!--Ti crea una linea-->
+        <hr>
+        <!--ti ricordi dei link di prima? questo è un luogo in cui uno di loro ti porta-->
+        <section id="section1">
+            <h2>Section 1</h2>
+            <hr>
+
+            <img src="https://via.placeholder.com/300x200" aalt="image 1">
+            <!--Pare che in alcuni casi non c'è bisogno di più tag per chiudere-->
+            <p>
+                Something something... anything and something
+            </p>
+
+            <!--Lista da ordinare-->
+            <ul>
+                <!--elementi di lista-->
+                <li>aaa</li>
+                <li>eee</li>
+                <li>iii</li>
+                <li>ooo</li>
+                <li>uuu</li>
+            </ul>
+        </section>
+
+
+
+        <hr>
+        <section id="section2">
+            <h2>Section2</h2>
+            <img src="https://via.placeholder.com/300x200" alt="Immagine 2" />
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            </p>
+            <!--Con ordinato, si intende che gli elementi hanno un numero-->
+            <ol>
+                <li>aaa</li>
+                <li>aaa</li>
+                <li>aaa</li>
+                <li>aaa</li>
+                <li>aaa</li>
+            </ol>
+        </section>
+
+
+        <hr>
+        <section id="section3">
+            <h2>Section3</h2>
+            <img src="https://via.placeholder.com/300x200" alt="Immagine 3" />
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            </p>
+            <!--tabella, i guess-->
+            <table>
+                <!--ogni tr corrisponde ad una riga di una tabella-->
+                <tr>
+                    <!--di conseguenza un th si occupa di una colonna...i guess-->
+                    <th>Prima intestazione</th>
+                    <th>Seconda intestazione</th>
+                    <th>Terza intestazione</th>
+                    <th>Quarta intestazione</th>
+                </tr>
+                <!--tho, penso che per delle linee servirebbe aggiungere delle lineee/colonne-->
+                <tr>
+                    <th>Prima prova</th>
+                    <th>Seconda prova</th>
+                </tr>
+                <tr>
+                    <th>Cella superiore</th>
+                    <th>Cella inferiore</th>
+                </tr>
+                <tr>
+                    <th>Cella anteriore</th>
+                    <th>Cella posteriore</th>
+                </tr>
+            </table>
+        </section>
+
+
+        <hr>
+
+        
+        <section id="section4">
+            <h2>Section4</h2>
+            <img src="https://via.placeholder.com/300x200" alt="Immagine 4" />
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            </p>
+            <!--ogni cosa che farai in quest'area, dal momento della selezione, ti riporterà in cima... eccetto le opzioni-->
+            <form action="#" method="post">
+                <div>
+                    <!--il type serve a gestire il tipo di input, il name... il nome ed il placeholder per mettere un testo da far apparire quando non c'è scritto niente-->
+                    <div class="color-a"> <input type="text" name="nome" placeholder="Nome" /> </div>
+                </div>
+                <div>
+                    <div class="color-b"> <input type="email" name="email" placeholder="Email" /> </div>
+                </div>
+                <div>
+                    <div class="color-c"> <input type="password" name="password" placeholder="Password" /> </div>
+                </div>
+                <div>
+                    <div class="color-c">
+                        <textarea name="testo">Testo </textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="color-b">
+                        <select name="opzione">
+                            <option value="1">Opzione 1</option>
+                            <option value="2">Opzione 2</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div>
+                    <div class="color-a">
+                        <input type="submit" name="submit" placeholder="invia" />
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <p>testo di prova</p>
+    
+        <a href="#">Back to the top</a>
+        <button id="last" type="button">Bottone del niente</button>
+      </div>
+    
+      <footer>
+        <p>copyright © (alt+184)</p>
+        <ol>
+          <li>aaa</li>
+          <li>aaa</li>
+          <li>aaa</li>
+          <li>aaa</li>
+          <li>aaa</li>
+        </ol>
+      </footer>
+
+
+
+        
+    </div>
+</body>
+
+</html>

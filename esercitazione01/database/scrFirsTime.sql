@@ -1,0 +1,2 @@
+CREATE TABLE categorie (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT);
+CREATE TABLE prodotti (id INTEGER PRIMARY KEY AUTOINCREMENT, nomeSpec TEXT, nomeGen TEXT, prezzo REAL, quantita INTEGER, id_categoria INTEGER, FOREIGN KEY (id_categoria) REFERENCES categorie(id));
