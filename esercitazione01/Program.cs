@@ -1,858 +1,863 @@
-﻿using Newtonsoft.Json;
+﻿using System.Drawing;
 
 class Program
 {
+
     static void Main(string[] args)
     {
-        #region Tipi di dati e variabili
+        //Indovina, Osperà!
+        /*
+        6 dadi, 2 assist, 4 haunted
+        2 numeri da giocatore
+        turni predefiniti
 
-        bool finito = false;
-        char opz;
-        //per utilizzare il percorso relativo delle cartelle
-        string pathDirJson = @"./files/JSON";
+        punteggio: modificato in base alle azioni scelte
+        punteggio... azione da poi pensarci è il ritiro dei dadi assist
 
-        #endregion
+        punteggio- fare na media di punti minimi per turno
+        punteggio! ricalibrare quanto si guadagna, è più facile beccare qualcosa che non
+        punteggio!! magari osperà ne guadagna ancora di meno, solo metà
 
-        if (!Directory.Exists(pathDirJson))
+        file? se vuoi un top score or just una cronologia... but for now non lo considero una cosa urgente
+        file?? salvataggio del turno corrente, in caso non hai molto tempo, ma vuoi continuare
+        file??? token per ripresa, ask se vuole continuare, numero turno, punteggio dadi, punto totale
+        file!! nome per sapere chi era, turno per sapere dove era rimasto, punto per sapere i punti, bool per sapere se era finita
+
+        messaggi? errori, taunting, indovinato, random e incitazione... ringraziamento
+
+        richiesta? se file, chiedi prima il nome per educazione, screanzato
+        richiesta?? voler fare un altra partita
+
+        random? da 1 a 6 per dado, da x a y per messaggio (!random se usi file per messaggio)
+
+        sottra punteggio? usare un numero costante come prezzo
+        sottra punteggio?? non si può se poi si va in debito
+        sottra punteggio??? Solo se il giocatore se lo può permettere
+
+        grafica? hard for me, ma se devo separerei di tot per dado haunted, dadi assist rivelati solo su richiesta
+
+
+        unneeded thing... csv per i testi: adding a number to each sentence
+        unneeded thing.. number equals a color, switch case to decide... tho you'll need a function now... ya can't just use the block if you want it polished
+        unneeded thing. another variable to know what are ya talking 'bout in file.... i need json for this......
+        unneeded thing different files... each one does a specific thing... additional variable to know if one is the same
+        unneeded... thing... maybe even a variable to know you need a \n at the end
+        thing... unneeded... format=Text, color, how many \n, alternative
+
+        thing.. UNNEEEDEEEED add a way to add variables into the text, like for example: if csv starts with "x", substitute with y[i]
+        THING...unneeedeeeeeeeeed.... use a sentence that has no sense to do that.... try with "vialen"
+        */
+        Console.Clear();
+
+
+        //variabile utilizzata per la reazione da parte del computer
+        int critica = 0;
+        //utilizzato per calcolo punti
+        float punto = 0;
+        //utilizzato per il punteggio finale
+        float totPunto = 0;
+        //nome del giocatore, per ora non avrà utilizzo finchè non arrivo al file
+        string defaultName = "Player";
+        string player = defaultName;
+        //dadi Osperà (avendo un pò un ruolo da aiutante, lo considero principalmente come assistente), ce ne saranno 2
+        int[] dadAss = new int[2];
+        //i dadispera, ce ne saranno 4
+        int[] dadisp = new int[4];
+        //2 variabili che verranno usate per indovinare i numeri
+        int guess = 1;    //base di un dadospera
+        int sumGuess = 2; //somma di 2 dadispera... o uno base
+        //turni di una partita
+        int maxTurn = 5;
+        //token per rivelare i dadi assist
+        int reveal = 0;
+        //token per terminare la partita
+        bool end = false;
+        //token per sapere se il giocatore vuole risentire la spiegazione
+        bool rule = false;
+        //basic è il punteggio per indovinare uno base, sarà soggetto a ricalibrazioni in caso vedessi che è troppo o troppo poco
+        float basic = 4;
+        //sumBasic è il punteggio per indovinare una somma
+        float sumBasic = (float)Math.Truncate(basic + (basic / 2));
+        //assBas è il punteggio se indovina l'assist un numero base
+        float assBas = (float)Math.Ceiling(basic - basic / 4);
+        //asSum è il punteggio se l'assist indovina una somma
+        float asSum = (float)Math.Ceiling(sumBasic - sumBasic / 4);
+        //punteggio minimo per effettivamente vincere
+        float vinPunt = sumBasic * maxTurn;
+        //costo in punti per far tirare nuovamente ad Osperà, metà dei punti per base
+        float pricePunt = (float)Math.Round(basic / 2);
+
+        //array di float usato per stampare insieme al file csv
+        float[] stampaNumero = new float[1];
+        //usato meramente per debug
+        int meTime = 500;
+
+
+        //prova di apertura di un file... altrimenti se ne crea uno nuovo
+        //path del file di salvataggio
+        string pathSave = @"salvataggio\saveOspera.txt";
+        if (!File.Exists(pathSave))
         {
-            Directory.CreateDirectory(pathDirJson);
-        }
-
-        do
-        {
-            Console.Clear();
-
-            MenuSelezione();
-            //richiesta input utente
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-
-            switch (keyInfo.KeyChar)
+            File.Create(pathSave).Close();
+            string[] defaultStuff = { "Nome", player, "Turno", "0", "Punteggio Totale", "0", "WIP?", "False" };
+            for (int i = 0; i < 8; i++)
             {
-                case '1':
-                    Console.Clear();
-
-                    MenuInserisci();
-                    opz = SelezioneInserisci();
-                    if (opz != 'r')
-                    {
-                        Inserisci(opz);
-                    }
-                    // InserisciCSV();
-                    break;
-
-                case '2':
-                    // VisualizzaAlimenti();
-                    Console.Clear();
-                    StampaAlimento(pathDirJson);
-                    Console.ReadKey();
-
-                    break;
-
-                case '3':
-                    // VisualizzaAlimenti(opzione);
-                    Console.Clear();
-                    StampaAlimento(pathDirJson, "exp");
-                    Console.ReadKey();
-
-                    break;
-
-                case '4':
-                    // EliminaAlimenti();
-                    Console.Clear();
-                    Elimina(pathDirJson);
-
-                    break;
-
-                case 'e':
-                    // SalvaFile();
-                    ScriviAColori("Uscita in corso.", "blu");
-                    Thread.Sleep(800);
-                    finito = true;
-                    break;
-
-                default:
-                    ScriviAColori("Scelta errata", "rosso");
-                    Thread.Sleep(1000);
-                    break;
+                File.AppendAllText(pathSave, defaultStuff[i] + "\n");
             }
         }
-        while (!finito);
-
-    }
-
-    #region  Metodi interfaccia utente e grafica
-    /*Visualizza il menu principale del programma
-    */
-    static void MenuSelezione()
-    {
-        ScriviAColori("Traccia Alimenti Frigorifero", "blu");
-        Console.WriteLine("\n");
-        Console.WriteLine("1. Inserisci alimento");
-        Console.WriteLine("2. Visualizza tutti");
-        Console.WriteLine("3. Alimenti in scadenza/esaurimento");
-        Console.WriteLine("4. Elimina alimento");
-        Console.WriteLine("e. Esci");
-    }
-
-    /*Visualizza menu dell'opzione 1.Inserisci alimento*/
-    static void MenuInserisci()
-    {
-        ScriviAColori("INSERISCI ALIMENTO", "blu");
-        Console.WriteLine("\n");
-        Console.WriteLine("1. Inserisci da tastiera");
-        Console.WriteLine("2. Importa da file csv");
-        Console.WriteLine("r. Torna indietro");
-    }
-    #endregion
-
-    #region Logica del programma
-
-    /*Metodo che permette l'inserimento di un alimento da tastiera o da file csv a seconda
-    dell'opzione inserita. Verifica la correttezza dei dati inseriti e il giusto formato.
-    Opzione: 't'  inserisci da tastiera
-            'f'  inserisci da file csv
-
-    INPUT: char opzione -----> default 't'
-    */
-    static void Inserisci(char opzione)
-    {
-        bool eseguito;
-        //inserisci da file csv
-        if (opzione == 'f')
-        {
-            //lettura del file csv
-            eseguito = InserisciDaCSV();
-            if (eseguito)
-            {
-                ScriviAColori("\nCopia del file completata", "verde");
-                Thread.Sleep(1200);
-            }
-        }
-        else     //inserisci da tastiera
-        {
-            Console.Clear();
-            eseguito = InserisciDaTastiera();
-            if (eseguito)
-            {
-                ScriviAColori("\nInserimento completato", "verde");
-                Thread.Sleep(1200);
-            }
-        }
-    }
-
-    /*Gestisce l'inserimento dei dati mediante i metodi di controllo input:
-    - InserisciNome() ---> verifica il formato del nome
-    - InserisciQuantita--> verifica il formato quantita
-    - InserisciData------> verifica la data di scadenza
-
-    OUTPUT: bool corretto -----> true se l'inserimento va a buon fine; 
-    */
-    static bool InserisciDaTastiera()
-    {
-        bool corretto = false;
-        string alimento, scadenza;
-        int quantita;
-
-        while (!corretto)
-        {
-            ScriviAColori("Inserisci gli alimenti", "verde");
-            Console.WriteLine("\n");
-            Console.Write("Alimento: ");
-            alimento = FormatoNome();
-            Console.Write("Quantità: ");
-            quantita = FormatoQuantita();
-            Console.Write("Data gg/mm/aaaa: ");
-            scadenza = FormatoData();
-
-            //se i controlli vanno a buon fine procedo con l'inserimento
-            //inserisci i dati nel file JSON
-            corretto = CreaAlimentoJSON(alimento, quantita, scadenza);
-        }
-
-        return corretto;
-    }
-
-    /*Visualizza l'elenco completo di tutti gli alimenti nel frigo con quantita e data
-    sotto forma di tabella. 
-
-    Opzioni: - all ----> visualizza tutti
-            - exp ----> visualizza solo exp
-            - del ----> visualizza tutti con titolo diverso
-
-    INPUT: string opz ----------> default "all"
-            string pathDirJson ---> path della cartella JSON
-
-    OUTPUT: bool frigoVuoto ----> true se è vuoto; false se c'è almeno un alimento
-    */
-    static bool StampaAlimento(string pathDirJson, string opz = "all")
-    {
-        if (opz == "all")
-        {
-            ScriviAColori("Elenco alimenti\n", "blu");
-        }
-        else if (opz == "exp")
-        {
-            ScriviAColori("Elenco scadenza/esaurimento\n", "blu");
-        }
-        else if (opz == "del")
-        {
-            ScriviAColori("Elimina alimento\n", "blu");
-        }
-
-        Console.WriteLine();
-
-        //memorizzo il path di tutti i files JSON
-        string[] files = Directory.GetFiles(pathDirJson);
-        int conta = 1;  //conta il numero degli elementi
-        bool frigoVuoto;
-
-        if (files.Length == 0)
-        {
-            frigoVuoto = true;
-            ScriviAColori("frigo vuoto\n", "verde");
-        }
-        else
-        {
-            frigoVuoto = false;
-
-            foreach (string file in files)
-            {
-                string jsonFile = File.ReadAllText(file);
-                dynamic obj = JsonConvert.DeserializeObject(jsonFile)!;
-                string scadenza = obj.scadenza;
-                int quantita = obj.quantita;
-                string alimento = obj.alimento;
-
-                if (ControllaScadenza(scadenza))    //se scaduto scrive in rosso
-                {
-                    ScriviAColori($"{conta}. {alimento} {quantita} {scadenza} --scaduto--\n", "rosso");
-                }
-                else if (ControllaScadenza(scadenza, 3))   //se in scadenza entro 2 giorni 
-                {
-                    ScriviAColori($"{conta}. {alimento} {quantita} {scadenza} --in scadenza--\n", "magenta");
-                }
-                else if (quantita < 2)    //se ne rimangono meno di 2 scrive in giallo
-                {
-                    ScriviAColori($"{conta}. {alimento} {quantita} {scadenza} --in esaurimento--\n", "giallo");
-                }
-                else    //stampa normale
-                {
-                    if (opz == "all" || opz == "del")
-                    {
-                        Console.Write($"{conta}. {alimento} {quantita} {scadenza}\n");
-                    }
-                }
-                conta++;
-            }
-
-        }
-        if (opz != "del")
-        {
-            Console.Write("\npremi invio...");
-        }
-
-        return frigoVuoto;
-    }
-
-    /*Metodo che gestisce l'eliminazione degli alimenti. 
-    Utilizza StampaAlimento() per visualizzare la lista aggiornata.
-    Utilizza il metodo accessorio SelezionaElimina()
-
-    INPUT: string pathDirJson -----> il path della directory JSON
-    */
-    static void Elimina(string pathDirJson)
-    {
-        bool ripetiOperazione = false;
-
-        do
-        {
-            Console.Clear();
-            //visualizza lista alimenti, opz = "del" scrive il titolo corretto del menu elimina
-            ripetiOperazione = StampaAlimento(pathDirJson, "del");
-
-            if (!ripetiOperazione)
-            {
-                ripetiOperazione = SelezioneElimina(pathDirJson);
-            }
-            else
-            {
-                Console.ReadKey();
-            }
-
-        }
-        while (!ripetiOperazione);
-    }
-
-    /*Metodo accessorio che elimina o modifica i file JSON a seconda della selezione
-    dell'utente.
-
-    INPUT: string pathDirJson -----> il path della directory JSON
-
-    OUTPUT: bool eseguito ---------> true torna al menu principale;
-    */
-    static bool SelezioneElimina(string pathDirJson)
-    {
-        //seleziono tutti i file della cartella JSON
-        string[] files = Directory.GetFiles(pathDirJson);
-        int conta = files.Length;   // conto i file
-        bool eseguito = false;
-
-        Console.WriteLine("\nVuoi eliminare qualcosa? (s/n) ");
-        string input = Console.ReadLine()!;
-        if (input == "n")
-        {
-            eseguito = true;    //se non voglio piu inserire torno al menu principale
-        }
-        else if (input == "s")
-        {
-            Console.WriteLine("\nCosa vuoi eliminare?");
-            try
-            {
-                //memorizzo il numero scelto dall'utente che corrisponde 
-                //all'elemento N-esimo della lista visualizzata a schermo
-                int selezionato = int.Parse(Console.ReadLine()!);
-
-                if (selezionato < 1 || selezionato > conta)
-                {
-                    throw new Exception(); //se non rientra nel range corretto
-                }
-
-                string file = files[selezionato - 1]; //path del file da modificare/cancellare
-                string jsonFile = File.ReadAllText(file);   //il contenuto del file JSON
-                dynamic obj = JsonConvert.DeserializeObject(jsonFile)!;
-                string alimento = obj.alimento;
-                int quantita = obj.quantita;
-                string scadenza = obj.scadenza;
-
-                //se ne rimane 1 solo alimento di quel tipo chiedo se eliminare
-                if (quantita == 1)
-                {
-                    Console.Write("Vuoi eliminare ");
-                    ScriviAColori($"{obj.alimento}", "verde");
-                    Console.Write(" ? (s/n)");
-                    string risposta = Console.ReadLine()!.ToLower();
-
-                    if (risposta == "s")
-                    {
-                        File.Delete(file);
-                    }
-                }
-                else
-                {
-                    bool corretto = false;
-                    do
-                    {
-                        Console.Clear();
-
-                        Console.WriteLine($"Ci sono {quantita} alimenti del tipo ");
-                        ScriviAColori($"{obj.alimento}", "verde");
-                        Console.Write("\nQuanti ne vuoi eliminare? ");
-                        try
-                        {
-                            int quantitaDaEliminare = int.Parse(Console.ReadLine()!);
-                            if (quantitaDaEliminare > quantita)
-                            {
-                                throw new Exception();
-                            }
-                            else if (quantitaDaEliminare == quantita)
-                            {
-                                Console.Write("Vuoi eliminare ");
-                                ScriviAColori($"{obj.alimento}", "verde");
-                                Console.Write(" ? (s/n)");
-                                string risposta = Console.ReadLine()!.ToLower();
-
-                                if (risposta == "s")
-                                {
-                                    File.Delete(file);
-                                    ScriviAColori("Alimento eliminato", "verde");
-                                    Thread.Sleep(800);
-                                    corretto = true;
-                                }
-                            }
-                            else
-                            {
-                                quantita -= quantitaDaEliminare;
-                                // Console.WriteLine("DEBUG prima di inviare il codice" + quantita);   //DEBUG
-                                CreaAlimentoJSON(alimento, quantita, scadenza);    //modifico e sovrascrivo
-                                ScriviAColori("Aggiornato", "verde");
-                                Thread.Sleep(800);
-                                Console.ReadKey();
-                                corretto = true;
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            ScriviAColori("Selezione quantita errata", "rosso");
-                            Thread.Sleep(800);
-                        }
-                    }
-                    while (!corretto);
-                }
-            }
-            catch (Exception)
-            {
-                ScriviAColori("Selezione errata", "rosso");
-                Thread.Sleep(800);
-            }
-        }
-        return eseguito;
-    }
-
-    /*Metodo accessorio che crea un file JSON per ogni alimento inserito, nomina il file
-    con il nome dell'alimento e parte della data: 
-    esempio alimento_gg_mm.json 
-    Se il file non esiste ne crea uno nuovo.
-
-    INPUT: string nome -------> nome alimento 
-            string quantita ---> quantita alimento
-            string data -------> data di scadenza
-
-    OUTPUT: true se tutto è andato a buon fine; 
-    */
-    static bool CreaAlimentoJSON(string alimento, int quantita, string scadenza)
-    {
-        // Console.WriteLine($"alimento: {alimento} quantita: {quantita} scadenza: {scadenza}");   //DEBUG
-        // Console.ReadKey();                                                                      //DEBUG
-
-        string nomeFile = alimento + "_" + scadenza[..2] + "_" + scadenza.Substring(3, 2);
-
-        string pathJson = @"./files/JSON/" + nomeFile + ".json";
+        string[] datiSave = File.ReadAllLines(pathSave);
+        bool resume = false;
         try
         {
-            if (!File.Exists(pathJson)) //se non c'è alcun prodotto lo creo
-            {
-                File.Create(pathJson).Close();
-            }
-
-            //inserisco i dati nel file JSON
-            File.WriteAllText(pathJson, JsonConvert.SerializeObject(new { alimento, quantita, scadenza }));
-            return true;
+            resume = Convert.ToBoolean(datiSave[7]);
         }
         catch
         {
-            ScriviAColori("Errore [CreaAlimentoJSON]!!!", "rosso");
-            return false;
+            Console.WriteLine("Mistakes were made my friend, devo risistemare una cosa, per ora mi finisco");
+            return;
         }
-    }
-
-    /*Conta tutti gli elementi nella directory JSON
-
-    INPUT: string pathDirJson -----> il path della directory JSON.
-
-    OUTPUT: il numero dei files contenuti nella cartella JSON.
-    */
-    static int ContaJson(string pathDirJson)
-    {
-        string[] files = Directory.GetFiles(pathDirJson);
-        return files.Length;
-    }
-
-    /* Metodo accessorio che permette la lettura del file csv e lo salva nel json corretto
-
-    OUTPUT: false se non è presente il file csv; true se è presente
-    */
-    static bool InserisciDaCSV()
-    {
-        string pathCSV = @"./files/inserisci.csv";
-        string pathTemp = @"./files/temp/";
-        if (!File.Exists(pathCSV))
+        if (resume)
         {
-            ScriviAColori("Nessun file csv trovato", "rosso");
-            Thread.Sleep(800);
-            return false;
-        }
-        else
-        {   //leggo tutto il file csv compresa l intestazione
-            string[] righe = File.ReadAllLines(pathCSV);
-            string[][] alimenti = new string[righe.Length][];
-
-            for (int i = 0; i < righe.Length; i++)
+            Console.Write($"Vedo che la partita era crashata per qualche motivo...\nPartita del giocatore ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"{datiSave[1]}");
+            Console.ResetColor();
+            Console.Write(", Turno ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"{datiSave[3]}");
+            Console.ResetColor();
+            Console.Write(", Punteggio ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write($"{datiSave[5]}");
+            Console.ResetColor();
+            Console.WriteLine("\nVuoi riprendere da qui?");
+            Console.WriteLine("(Premi S per si, N per no)");
+            while (true)
             {
-                alimenti[i] = righe[i].Split(",");  //per ogni riga del file csv creo un array alimento
+                ConsoleKeyInfo risposta = Console.ReadKey(true);
+                if (risposta.Key == ConsoleKey.S)
+                {
+                    Console.WriteLine($"\nAight...");
+                    break;
+                }
+                else if (risposta.Key == ConsoleKey.N)
+                {
+                    Console.WriteLine($"\nMay you find your books in this place");
+                    resume = false;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Avrei bisogno di sapere se Si o No...");
+                }
+            }
+            Thread.Sleep(1500);
+            Console.Clear();
+        }
+
+        string pathText = @"..\esercitazione02\csvsenteces\prova.csv";
+        bool allGood = true;
+        /*
+        //mero debug, per provare se funziona con un file csv di prova
+        allGood=StampaTestoCsv(pathText, 0);
+        if(!allGood)
+        {
+            return;
+        }
+        
+        
+        Thread.Sleep(2000);
+*/
+
+
+
+        //questo token serve per evitare di dare i messaggi di introduzione se si sta riprendendo una partita ancora non finita
+        if (!resume)
+        {
+            Console.Write("Buongiorno o Buonasera, miei cari telenovelaspettatori, oggi si dà inizio ad un altra partita diiiii\n\n\t\t");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Thread.Sleep(700);
+            Console.WriteLine("INDOVINA, OSPERÀ!\n");
+            Console.ResetColor();
+            Thread.Sleep(1200);
+            Console.WriteLine("...Ok, dopo questa entrata, ora andiamo effetivamente al gioco");
+            Thread.Sleep(900);
+            Console.WriteLine("\nMi diresti il tuo nome prima di iniziare?");
+            player = Console.ReadLine()!;
+            if (player.Trim().Length <= 0)
+            {
+                Console.WriteLine($"Allora ti chiamerò {defaultName}, dato che ti piace fare il misterioso");
+                player = defaultName;
+            }
+            else
+            {
+                Console.WriteLine($"Bene, {player}, piacere di conoscerti");
+            }
+            Thread.Sleep(900);
+        }
+        while (!end)
+        {
+            datiSave[1] = player;
+            //sarà sempre falso dal secondo ciclo in poi, in modo da evitare la domanda all'inizio
+            if (!rule)
+            {
+                Console.WriteLine("Vuoi sentire le regole?\n(S per si, N per no)");
+                rule = Accettare("Fammi rileggere...", "Ok", "Avrei bisogno di sapere se Si o No...", false);
+                Thread.Sleep(meTime * 2);
+                Console.Clear();
+            }
+            //ho messo un blocco a parte per via della grandezza per la stampa del regolamento, tutto per questione di grafica
+            //il check del token è per prevenire di riscrivere il regolamento di nuovo in una partita
+            if (rule)
+            {
+                pathText = @"..\esercitazione02\csvsenteces\regoleOspera.csv";
+                //Regolamento, una lunga serie di print
+                float[] valori = { basic, sumBasic, basic * 3, assBas, asSum,
+                                    sumBasic + (float)Math.Truncate(sumBasic / 2), (float)Math.Truncate((basic * 2) + (basic / 2)),
+                                    asSum + (float)Math.Truncate(asSum / 2), (float)Math.Truncate((assBas * 2) + (assBas / 2)) };
+                Array.Resize(ref stampaNumero, valori.Length);
+                Array.Copy(valori, stampaNumero, valori.Length);
+                allGood = StampaTestoCsv(pathText, 0, stampaNumero);
+                if (!allGood)
+                {
+                    return;
+                }
+                Thread.Sleep(meTime);
+                Console.WriteLine("\nDetto ciò, iniziamo il gioco\n");
+                rule = false;
             }
 
-            try
+
+            //questo è necessario solo per debug
+            //end = true;
+
+            
+            int predefined = 0;
+            if (resume)
             {
-                for (int i = 1; i < alimenti.Length; i++)
+                predefined = Convert.ToInt32(datiSave[3]);
+                totPunto = Convert.ToInt32(datiSave[5]);
+            }
+
+            //inizio del gioco
+            for (int i = predefined; i < maxTurn; i++)
+            {
+                //inizializzazone della variabile volatile del punteggio
+                punto = 0;
+
+                //Scrittura dei dati in una variabile, per poi salvarli verso la fine del turno...
+                //cambio piano, lo faccio salvare subito
+                datiSave[3] = i.ToString();
+                datiSave[5] = totPunto.ToString();
+                datiSave[7] = true.ToString();
+                File.WriteAllLines(pathSave, datiSave);
+
+                //inizializzazione random all'inizio della manche per rendere più casuale possibile
+                Random ran = new Random();
+                Thread.Sleep(meTime);
+                Console.WriteLine($"{i + 1}° turno\n\nInserisci il numero base");
+
+
+                guess = ReplyIntRange("Non stiamo giocando a qualcosa come DnD, le facce son solo 6 e richiedo un numero da 1 a 6",
+                                    "Sarebbe strano trovare delle parole sui dadi, necessito un numero... da 1 a 6", 1, 6);
+                Console.WriteLine("Inserisci la somma... o un altro numero base");
+
+
+                sumGuess = ReplyIntRange("Richiedo o la somma di 2 dadi o un altro numero base, dimmene un altra",
+                                    "Sarebbe strano trovare delle parole sui dadi, necessito un numero... da 1 a 12",
+                                    "Deve essere diverso dalla tua prima scelta", 1, 12, guess);
+
+                //si tirano sia i dadi assist che i dadispera
+                for (int l = 0; l < dadAss.Length; l++)
                 {
-                    int quantita = int.Parse(alimenti[i][1]);
-                    CreaAlimentoJSON(alimenti[i][0], quantita, alimenti[i][2]);
+                    dadAss[l] = ran.Next(1, 7);
+                }
+                for (int l = 0; l < dadisp.Length; l++)
+                {
+                    dadisp[l] = ran.Next(1, 7);
                 }
 
-            }
-            catch (Exception)
-            {
-                ScriviAColori("Errore [InserisciDaCSV]", "rosso");
-            }
-            if (!Directory.Exists(pathTemp))
-            {
-                Directory.CreateDirectory(pathTemp);
+                //ma solo i dadispera vengono rivelati
+                Thread.Sleep(meTime);
 
+                Console.Write($"Ecco a te i ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine($"Dadispera\n\n\t{dadisp[0]}\t{dadisp[1]}\t{dadisp[2]}\t{dadisp[3]}\n");
+                Console.ResetColor();
+
+
+                //token necessari per i punti e per diversi controlli
+                bool gotOne = false;
+                bool gotSome = false;
+                bool gotDoubleOne = false;
+                bool gotDoubleSome = false;
+                critica = 0;
+
+
+
+
+                //li si controlla uno ad uno
+                for (int l = 0; l < dadisp.Length; l++)
+                {
+                    //e per controllare le somme, si fa un altro ciclo
+                    for (int j = l; j < dadisp.Length; j++)
+                    {
+                        //se la somma di 2 diversi dadi haunted è uguale al secondo numero deciso dal giocatore
+                        if (l != j && dadisp[l] + dadisp[j] == sumGuess)
+                        {
+                            //gotsome è contrassegnato solamente dopo aver trovato una somma
+                            if (gotSome)//di conseguenza, non si riattiva prima di incontrare la stessa somma
+                                        //in una combinazione diversa
+                                gotDoubleSome = true;
+                            //lo si contrassegna
+                            gotSome = true;
+                        }
+                    }
+                }
+                //il motivo per farlo in un ciclo a parte, è per evitare che dei controlli non riuscisserò a rilevare
+                //in tempo tutte le somme prima del controllo in singolo
+                for (int l = 0; l < dadisp.Length; l++)
+                {
+                    //si fa un controllo per il numero base, che vale per ambo i numeri
+                    //ma il secondo numero deciso dal giocatore lo si controlla se non è stata rilevata una somma
+                    if (dadisp[l] == guess || (dadisp[l] == sumGuess && gotSome != true))
+                    {
+                        gotOne = true;
+                        //ci sarà un controllo per vedere se quello azzeccato ha un doppione
+                        for (int j = 0; j < dadisp.Length; j++)
+                        {
+                            if (l != j && dadisp[l] == dadisp[j])
+                            {
+                                gotDoubleOne = true;
+                            }
+                        }
+                    }
+                }
+                //giro di chek per il punteggio: pensavo di iniziare dal basso per andare in alto, if successivi insomma
+                //controllo se almeno ha indovinato un numero base
+                if (gotOne)
+                {
+                    //il punteggio verrà applicato
+                    punto = basic;
+                    critica = 1;
+                    //ma cambierà se il numero indovinato ha un doppione
+                    if (gotDoubleOne)
+                    {
+                        punto = (float)Math.Truncate((basic * 2) + (basic / 2));
+                        critica = 3;
+                    }
+                }
+                //simile al controllo precedente, ma con la somma
+                if (gotSome)
+                {
+                    //il punto verrà applicato
+                    punto = sumBasic;
+                    critica = 2;
+                    //se ha beccato a parte un numero base
+                    if (gotOne)
+                    {
+                        //il punteggio applicato sarà quello speciale
+                        punto = basic * 3;
+                        critica = 5;
+                        //e verrà ulteriormente aumentato se ha beccato i doppioni, una cosa moolto rara
+                        if (gotDoubleSome && gotDoubleOne)
+                        {
+                            punto = basic * 4;
+                            critica = 6;
+                        }
+                    }
+                    //altrimenti, si procede con la stessa procedura del numero base
+                    else
+                    //ciò è fatto in modo da dar priorità al punteggio massimo
+                    if (gotDoubleSome)
+                    {
+                        punto = sumBasic + (float)Math.Truncate(sumBasic / 2);
+                        critica = 4;
+                    }
+                }
+
+                //la critica indica quale file verrà stampato, ogni file avrà tot numeri di alternative, per rendere meno ripetitivi le reazioni
+                pathText = @"csvsenteces\giocaVince0" + critica + ".csv";
+                
+                //reazioni in base a quanto ha azzeccato il giocatore
+                Thread.Sleep(meTime);
+                if(!StampaTestoCsv(pathText, 0))
+                {
+                    return;
+                }
+
+
+                //in caso il giocatore avesse indovinato, li si chiede se vuole rischiare anche solo per vedere cosa aveva l'assistente
+                if (punto > 0)
+                {
+                    //si avvisa di quanti punti ha e del rischio in caso si volesse vedere che cosa hanno i dadi assistenti
+                    Thread.Sleep(meTime);
+
+
+                    pathText = @"csvsenteces\giocaVince.csv";
+                    stampaNumero[0] = 3;
+                    if (!StampaTestoCsv(pathText, 0, stampaNumero))
+                    {
+                        return;
+                    }
+
+                    Console.WriteLine($"(1 per rivelare l'assistente, 2 per tenerti i punti)");
+
+
+                    reveal = ReplyIntRange("(Ti ho richiesto 1 o 2)", "Unfortunately, non ho altre opzioni", 1, 2);
+                    //se accetta il rischio, si dimezza di già il punteggio, il target è solo cò che ha indovinato il giocatore, non i dadi
+                    if (reveal == 1)
+                    {
+                        Thread.Sleep(meTime);
+                        punto = (float)Math.Round(punto / 2);
+                        Console.Write($"Ora i tuoi punti stanno a ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Thread.Sleep(meTime);
+                        Console.Write(punto);
+                        Console.ResetColor();
+                        Thread.Sleep(meTime);
+                        Console.WriteLine($", vediamo se ne sarà valsa la pena\n");
+                    }
+                }
+                //invece se il giocatore non ha preso niente...
+                else
+                {
+                    //si dà il messsaggio per avvisarlo e chiedere se vuole vedere se magari l'assistente li da un qualche punto
+                    pathText = @"csvsenteces\giocaPerde.csv";
+                    if (!StampaTestoCsv(pathText, 0))
+                    {
+                        return;
+                    }
+
+
+                    Console.Write($"(1 per rivelare i dadi ");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write($"Osperà");
+                    Console.ResetColor();
+                    Console.WriteLine($", 2 per gettare la spugna)");
+
+                    reveal = ReplyIntRange("(Ti ho richiesto 1 o 2)", "Unfortunately, non ho altre opzioni", 1, 2);
+                    //ma se per qualche strana ragione il giocatore non abbia voglia, si esprime la sorpresa di questa strana decisione
+                    if (reveal == 2)
+                    {
+                        Console.WriteLine("Honestly... non mi aspettavo qualcuno avrebbe rinunciato a prendere dei punti gratis");
+                    }
+                }
+                //solo dopo il bivio, si aggiungerà il punteggio al punteggio finale
+                totPunto += punto;
+
+
+
+                //ora, questa è l'operazione per i dadi Osperà, che avranno un simile procedimento a prima... probabilmente in futuro creerò un metodo
+                if (reveal == 1)
+                {
+                    Thread.Sleep(meTime);
+                    Console.Write($"Ecco cosa dice ");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write($"Osperà");
+                    Console.ResetColor();
+                    Console.WriteLine($":\n");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Thread.Sleep(meTime);
+                    Console.WriteLine($"\t{dadAss[0]}\t{dadAss[1]}\n");
+                    Console.ResetColor();
+                    //token necessari per i punti, per diversi controlli ed il punteggio
+                    gotOne = false;
+                    gotSome = false;
+                    gotDoubleOne = false;
+                    gotDoubleSome = false;
+                    critica = 0;
+                    float assPunt = 0;
+                    //a differenza di prima, i dadi assist hanno il vantaggio di aver ben 2 numeri base invece che uno, insieme alla somma
+                    for (int l = 0; l < dadisp.Length; l++)
+                    {
+                        //per evitare di rivedere dadi precedenti, inizio dallo stesso dado
+                        for (int j = l; j < dadisp.Length; j++)
+                        {
+                            //se la somma di 2 diversi dadi haunted è uguale alla somma dettata da Osperà
+                            if (l != j && dadisp[l] + dadisp[j] == dadAss[0] + dadAss[1])
+                            {
+                                //controllo se ci son 2 somme uguali in combinazioni diverse tramite il check
+                                if (gotSome)
+                                    gotDoubleSome = true;
+                                //some è contrassegnato alla fine per evitare di 
+                                gotSome = true;
+                            }
+                        }
+                    }
+                    for (int k = 0; k < dadAss.Length; k++)
+                    {
+                        //il motivo per farlo in un ciclo a parte, è per evitare che dei controlli non riuscisserò a rilevare
+                        //in tempo tutte le somme prima del controllo in singolo
+                        for (int l = 0; l < dadisp.Length; l++)
+                        {
+                            if (dadisp[l] == dadAss[k])
+                            {
+                                gotOne = true;
+                                //ci sarà un controllo per vedere se quello azzeccato ha un doppione
+                                for (int j = 0; j < dadisp.Length; j++)
+                                {
+                                    if (l != j && dadisp[l] == dadisp[j])
+                                    {
+                                        gotDoubleOne = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (gotOne)
+                    {
+                        assPunt = assBas;
+                        critica = 1;
+                        if (gotDoubleOne)
+                        {
+                            assPunt = (float)Math.Truncate((assBas * 2) + (assBas / 2));
+                            critica = 3;
+                        }
+                    }
+                    //simile al controllo precedente, ma con la somma
+                    if (gotSome)
+                    {
+                        //il punto verrà applicato
+                        assPunt = asSum;
+                        critica = 2;
+                        //se ha beccato a parte un numero base
+                        if (gotOne)
+                        {
+                            //il punteggio applicato sarà quello speciale
+                            assPunt = assBas * 3;
+                            critica = 5;
+                            //e verrà ulteriormente aumentato se ha beccato i doppioni, una cosa moolto rara
+                            if (gotDoubleSome && gotDoubleOne)
+                            {
+                                assPunt = assBas * 4;
+                                critica = 6;
+                            }
+                        }
+                        //altrimenti, si procede con la stessa procedura del numero base
+                        else
+                        //ciò è fatto in modo da dar priorità al punteggio massimo
+                        if (gotDoubleSome)
+                        {
+                            assPunt = asSum + (float)Math.Truncate(asSum / 2);
+                            critica = 4;
+                        }
+                    }
+
+
+                    //debug
+                    //critica = Convert.ToInt32(Console.ReadLine());
+
+                    pathText = @"csvsenteces\ospeVince0" + critica + ".csv";
+                    if (!StampaTestoCsv(pathText, 0))
+                    {
+                        return;
+                    }
+
+                    //reazioni in base a quanto ha azzeccato il giocatore
+                    Thread.Sleep(meTime);
+
+                    //se osperà indovina qualcosa, si avvisa al giocatore di quanto viene aumentato il punteggio
+                    if (assPunt > 0)
+                    {
+                        Thread.Sleep(meTime);
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write("Osperà");
+                        Console.ResetColor();
+                        Console.Write(" ti da ");
+                        Thread.Sleep(meTime);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(assPunt);
+                        Console.ResetColor();
+                        Console.Write(" punti insieme ai tuoi ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(punto);
+                        Console.ResetColor();
+                        Console.WriteLine(" punti\n");
+                    }
+                    //altrimenti, niente...
+                    else
+                    {
+                        Thread.Sleep(meTime);
+                        Console.Write("Stavolta ");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write("Osperà");
+                        Console.ResetColor();
+                        Console.WriteLine(" non è riuscito a trovare niente...\n");
+                    }
+
+                    //si aggiunge il punteggio subito stavolta
+                    //in futuro però vorrei vedere un modo per ripetere l'utilizzo di Osperà, col costo di punti
+                    totPunto += assPunt;
+                }
+
+
+
+                //si tiene presente al giocatore quanto si ha di punteggio totale
+                Console.Write("Il tuo punteggio totale sta a ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"{totPunto}\n");
+                Console.ResetColor();
+
+                //randomicamente si avviserà al giocatore quanti punti deve arrivare per vincere
+                int warn = 0;
+                if (totPunto < vinPunt)
+                {
+                    warn = ran.Next(0, 2);
+                    if (i == maxTurn - 1 || warn == 1)
+                    {
+                        Console.Write("Ti ricordo che devi raggiungere ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write($"{vinPunt}");
+                        Console.ResetColor();
+                        Console.WriteLine(" per vincere\n");
+                    }
+                }
             }
-            File.Move(pathCSV, $"{pathTemp}inserito.csv");
+
+            if (totPunto >= vinPunt)
+            {
+                Console.WriteLine("Complimenti, hai vinto");
+            }
+            else
+            {
+                Console.WriteLine("Spiacente, hai perso");
+            }
+
+            //Scrittura dei dati in una variabile, per poi salvarli verso la fine del turno...
+            //cambio piano, lo faccio salvare subito
+            datiSave[3] = maxTurn.ToString();
+            datiSave[5] = totPunto.ToString();
+            datiSave[7] = false.ToString();
+            File.WriteAllLines(pathSave, datiSave);
+
+
+            Console.WriteLine("\nVuoi Fare un altra partita?\n(Premi S per si, N per no)");
+            end = Accettare("\nAight...", "\nGrazie per aver giocato ad 'Indovina, Osperà'", "Avrei bisogno di sapere se Si o No...", true);
         }
+    }
+
+
+    static bool StampaTestoCsv(string path, int altern)
+    //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
+    {
+        //diversi trycatch per sapere che tipo di errore è accaduto in tutto ciò
+        try
+        {
+            try
+            {
+                string[] trova = File.ReadAllLines(path);
+                string[][] prova = new string[trova.Length][];
+                for (int i = 0; i < trova.Length; i++)
+                {
+                    prova[i] = trova[i].Split("|");//uno può utilizzare ciò che vuole, ma è alquanto importante decidere cosa usare per via della memoria usata per lo split in base al carattere
+                }
+                for (int i = 0; i < prova.Length; i++)
+                {
+                    if (Convert.ToInt32(prova[i][3]) == altern)
+                    {
+                        switch (Convert.ToInt32(prova[i][1]))
+                        {
+                            case 0:
+                                Console.ResetColor();
+                                break;
+                            case 1:
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                break;
+                            case 2:
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                break;
+                            case 3:
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                break;
+                            default:
+                                Console.WriteLine("Devi riscrivere i file, c'è qualcosa di strano in quel che ho letto");
+                                return false;
+                        }
+                        Console.Write(prova[i][0]);
+                        for (int l = 0; l < Convert.ToInt32(prova[i][2]); l++)
+                            Console.Write("\n");
+                    }
+                }
+                Console.ResetColor();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Riconfigura il codice o il file, qui c'è qualcosa di dannatamente sbagliato\n" + ex.Message);
+                return false;
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Sorry to break it to ya, but your whole team paid me to do this");
+            return false;
+        }
+
         return true;
     }
 
-    /*Gestisce l'iserimento del nome dell'alimento, controlla l'input inserito.
-
-    OUTPUT: string nome ---> contiene l'input dell'utente
-    */
-    static string FormatoNome()
+    //versione con array di float, in caso servisse stampare dei numeri variabili, prettamente di tipo float
+    static bool StampaTestoCsv(string path, int altern, float[] values)
+    //string path= il percorso del file in stringa, int altern= il numero di appartenenza del testo da stampare, params int[] values= opzionale, un array con delle variabili da stampare
     {
-        bool corretto = false;
-        string nome = "";
-
-        while (!corretto)
+        //try catch in caso qualche errore accada
+        try
         {
-            nome = Console.ReadLine()!;
-            if (nome == "")  //regular expression cerca se la prima cifra
+            //lettura e copiatura del file: il file deve esistere perchè è necessario per la stampa del testo customizzato
+            string[] trova = File.ReadAllLines(path);
+            string[][] prova = new string[trova.Length][];
+            for (int i = 0; i < trova.Length; i++)
             {
-                ScriviAColori("Errore di digitazione\r", "rosso");
-                Thread.Sleep(1000);
-                Console.Write("                     ");
-                Console.SetCursorPosition(10, 2);
+                prova[i] = trova[i].Split("|");//si utilizza | perchè nel contesto utilizzato, le virgole e punto e virgola hanno una buona chance d'esser usate nel testp
+            }
+            //count è un contatore riservato per le possibili variabili float
+            int count = 0;
+            //qui è dove avviene la stampa del testo da csv
+            for (int i = 0; i < prova.Length; i++)
+            {
+                //controllo preventivo che nella linea di testo sia presente una specifica stringa, possibilmente un qualcosa che a nessuno verrebbe in mente di mettere nel testo
+                if (prova[i][0].Trim() == "pABLO" && count < values.Length)
+                //il trim è usato per prevenire qualche errore nel controllo: gli spazi occupano degli slot della string
+                {
+                    //se è una linea dedicata ad una variabile, lo si imette al posto di quella stringa
+                    prova[i][0] = values[count].ToString();
+                    //il contatore aumenta per evitare di sforare l'array imesso come parametro
+                    count++;
+                }
+                //controllo che sia effettivamente 
+                if (Convert.ToInt32(prova[i][3]) == altern)
+                {
+                    switch (Convert.ToInt32(prova[i][1]))
+                    {
+                        case 0:
+                            Console.ResetColor();
+                            break;
+                        case 1:
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            break;
+                        case 2:
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            break;
+                        case 3:
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            break;
+                        default:
+                            Console.WriteLine("Devi riscrivere i file, c'è qualcosa di strano in quel che ho letto");
+                            return false;
+                    }
+                    Console.Write(prova[i][0]);
+                    for (int l = 0; l < Convert.ToInt32(prova[i][2]); l++)
+                        Console.Write("\n");
+                }
+            }
+            Console.ResetColor();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Riconfigura il codice o il file, qui c'è qualcosa di dannatamente sbagliato\n" + ex.Message);
+            return false;
+        }
+
+        return true;
+    }
+
+    //Funzione per leggere qualsiasi numero che sia compreso in un certo range, con dei commenti personalizzabili
+    static int ReplyIntRange(string stufo, string fuoriRange, int min, int max)
+    {
+        //bool per uscire dal while in modo normale
+        bool done = false;
+        //il numero inserito
+        int reply = 0;
+        while (!done)
+        {
+            //done verrà sempre cambiato, in modo da uscire finchè non accade un errore
+            done = true;
+            //try catch per evitare che l'utente digiti qualcosa che non sia un numero
+            try
+            {
+                reply = Convert.ToInt32(Console.ReadLine());
+                //stampa del messaggio per dire che non è nel range il numero scelto
+                if (reply < min || reply > max)
+                {
+                    Console.WriteLine(fuoriRange);
+                    //si rimane dentro al ciclo
+                    done = false;
+                }
+            }
+            //potrei modificarlo er renderlo esclusivo del problema di conversione
+            catch
+            {
+                //si indica all'utente che il programma necessita di un NUMERO
+                Console.WriteLine(stufo);
+                //rimane dentro al ciclo per questo
+                done = false;
+            }
+        }
+        //ritorna il numero digitato
+        return reply;
+    }
+    //Versione con una condizione in più: un numero da evitare all'interno del range ed un nuovo messaggio d'errore customizzabile
+    static int ReplyIntRange(string stufo, string fuoriRange, string paradosso, int min, int max, int original)
+    {
+        bool done = false;
+        int reply = 0;
+        while (!done)
+        {
+            done = true;
+            try
+            {
+                reply = Convert.ToInt32(Console.ReadLine());
+                if (reply < min || reply > max)
+                {
+                    Console.WriteLine(fuoriRange);
+                    done = false;
+                }
+                else
+                //messo in un if diverso essendo un errore di tipo diverso
+                if (original == reply)
+                {
+                    Console.WriteLine(paradosso);
+                    done = false;
+                }
+            }
+            catch
+            {
+                Console.WriteLine(stufo);
+                done = false;
+            }
+        }
+        return reply;
+    }
+
+    //Funzione che restituisce un bool, nel quarto parametro si deve mettere true o false che indica se si vuole usare la risposta S da tastiera
+    //per invece ritornare false
+    static bool Accettare(string good, string fine, string again, bool reverse)
+    {
+        //dichiarazione del bool accetta
+        bool accetta = false;
+        //il while deve essere forzatamente terminato
+        while (true)
+        {
+            //si attende un input da tastiera
+            ConsoleKeyInfo risposta = Console.ReadKey(true);
+            if (risposta.Key == ConsoleKey.S)
+            {
+                Console.WriteLine(good);
+                accetta = !reverse;
+                break;
+            }
+            else if (risposta.Key == ConsoleKey.N)
+            {
+                Console.WriteLine(fine);
+                accetta = reverse;
+                break;
             }
             else
             {
-                corretto = true;
+                Console.WriteLine(again);
             }
         }
-        return nome;
+        return accetta;
     }
-
-    /*Gestisce l'iserimento della quantita dell'alimento, controlla l'input inserito.
-
-    OUTPUT: int quantita ---> contiene l'input dell'utente
-    */
-    static int FormatoQuantita()
-    {
-        bool corretto = false;
-        int quantita = 0;
-        string erroreFormato = "deve essere un numero";
-
-        while (!corretto)
-        {
-            try
-            {
-                quantita = Int16.Parse(Console.ReadLine()!);
-                corretto = true;
-            }
-            catch (Exception)
-            {
-                ScriviAColori(erroreFormato + "\r", "rosso");
-                PulisciRiga(erroreFormato.Length, 10, 3);
-
-            }
-        }
-        return quantita;
-    }
-
-    /*Gestisce l'iserimento della data_scadenza dell'alimento, controlla l'input inserito.
-
-    OUTPUT: string data ---> contiene l'input dell'utente 
-    */
-    static string FormatoData()
-    {
-        bool corretto = false;
-        string input = "";
-        string erroreScaduto = "alimento gia scaduto";
-        string erroreFormato = "formato data errato";
-        string[] data = new string[3];
-        var annoInCorso = DateTime.Now.Year;    //memorizzo l anno in corso
-        var meseInCorso = DateTime.Now.Month;
-        var oggi = DateTime.Now.Day;
-
-        while (!corretto)
-        {
-            input = Console.ReadLine()!;
-
-            try
-            {
-                data = input.Split("/");
-                //converto in valore numerico per facilitare i controlli
-                int anno = int.Parse(data[2]);
-                int mese = int.Parse(data[1]);
-                int giorno = int.Parse(data[0]);
-                // Console.WriteLine("anno: " + anno); //DEBUG
-                // Console.WriteLine("mese: " + mese); //DEBUG
-                // Console.WriteLine("giorno: " + giorno); //DEBUG
-                // Console.ReadKey();                      //DEBUG
-
-
-                if (anno < annoInCorso) //anno precedente quindi scaduto
-                {
-                    if (anno < 2000)
-                    {
-                        throw new Exception();
-                    }
-
-                    ScriviAColori(erroreScaduto + "\r", "rosso");
-                    PulisciRiga(erroreScaduto.Length, 17, 4);
-                    continue;
-                }
-                else if (anno >= annoInCorso)      //anno attuale verifico mese e giorno
-                {
-                    if (mese > 13 || mese < 1)  //mese errato
-                    {
-                        throw new Exception();
-                    }
-                    if (giorno > 31 || giorno < 1)  //giorno errato
-                    {
-                        throw new Exception();
-                    }
-
-                    if (anno == annoInCorso && mese < meseInCorso) //anno in  corso ma scaduto
-                    {
-                        ScriviAColori(erroreScaduto + "\r", "rosso");
-                        PulisciRiga(erroreScaduto.Length, 17, 4);
-                        continue;
-                    }
-                    else if (anno == annoInCorso && mese == meseInCorso)   //anno in corso e mese in corso
-                    {
-                        if (giorno < oggi)  //scaduto
-                        {
-                            ScriviAColori(erroreScaduto + "\r", "rosso");
-                            PulisciRiga(erroreScaduto.Length, 17, 4);
-                            continue;
-                        }
-                    }
-                }
-
-                //correggo il formato dell'output
-                if (data[1].Length < 2)
-                {
-                    data[1] = "0" + data[1];    //mese formattato a 2 cifre
-                }
-                if (data[0].Length < 2)
-                {
-                    data[0] = "0" + data[0];    //giorno formattato a 2 cifre
-                }
-                input = $"{data[0]}/{data[1]}/{data[2]}";
-
-            }
-            catch (Exception)
-            {
-                ScriviAColori(erroreFormato + "\r", "rosso");
-                PulisciRiga(erroreFormato.Length, 17, 4);
-                continue;
-            }
-            corretto = true;
-        }
-        return input;
-    }
-
-    /*Verifica se il prodotto è prossimo alla scadenza controllando la data di oggi e
-    quella del prodotto 
-
-    INPUT: string scadenza -----> data di scadenza dell'alimento da controlare
-            int offset ----------> entro quanti giorni verificare la scadenza;  default = 0
-
-    OUTPUT: bool scade ---------> true se sta per scadere; false se ancora buono
-    */
-    static bool ControllaScadenza(string scadenza, int offset = 0)
-    {
-        var annoInCorso = DateTime.Now.Year;    //memorizzo l anno in corso
-        var meseInCorso = DateTime.Now.Month;
-        var oggi = DateTime.Now.Day;
-        bool scade = false;
-
-        string[] data = scadenza.Split("/");
-
-        try
-        {
-            //converto in valore numerico per facilitare i controlli
-            int anno = int.Parse(data[2]);
-            int mese = int.Parse(data[1]);
-            int giorno = int.Parse(data[0]);
-
-            if (anno < annoInCorso)
-            {
-                scade = true;
-            }
-            else if (anno == annoInCorso)
-            {
-                if (mese < meseInCorso)
-                {
-                    scade = true;
-                }
-                else if (mese == meseInCorso)
-                {
-                    if (giorno - offset < oggi)
-                    {
-                        scade = true;
-                    }
-                }
-            }
-        }
-        catch
-        {
-            ScriviAColori("Errore [ControllaScadenza]!!!", "rosso");
-        }
-        return scade;
-    }
-
-    /*Gestisce la scelta del menu di inserimento
-
-    OUTPUT: char opz ---> opzione scelta dall'utente
-    */
-    static char SelezioneInserisci()
-    {
-        bool corretto = false;
-        char opz = '0';
-        do
-        {
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-            switch (keyInfo.KeyChar)
-            {
-                case '1':   //inserisci da tastiera
-                    opz = 't';
-                    corretto = true;
-                    break;
-
-                case '2':   //inserisci da file
-                    opz = 'f';
-                    corretto = true;
-                    break;
-
-                case 'r':   //torna indietro
-                    opz = 'r';
-                    corretto = true;
-                    break;
-
-                default:
-                    ScriviAColori("Selezione errata\r", "rosso");
-                    Thread.Sleep(1000);
-                    Console.Write("                 \r");
-                    break;
-            }
-        }
-        while (!corretto);
-
-        return opz;
-    }
-
-    #endregion
-
-    #region Metodi di utility
-
-    /*Metodo accessorio che cancella il contenuto della riga dopo l'inserimento
-    dell' input da parte dell' utente.
-
-    INPUT: int lunghezzaErrore -----> numero di caratteri dell'errore 
-            int posizioneX ----------> posizione cursore ascisse variabile data dalla 
-                                        lunghezza del messaggio di inserimento
-                                        es (Inserisci: ) = 11 caratteri
-            int posizioneY ----------> posizione cursore ordinate fissato a priori
-    */
-    static void PulisciRiga(int lunghezzaErrore, int posizioneX, int posizioneY)
-    {
-        Thread.Sleep(1000);  //attende la lettura del messaggio
-
-        //cancella il  messaggio di errore 
-        for (int i = 0; i < lunghezzaErrore; i++)
-        {
-            Console.Write(" ");
-        }
-
-        //sposto il cursore al punto in cui l'utente ha inserito l'input
-        //cancello il testo e mi riposiziono al punto corretto
-        Console.SetCursorPosition(posizioneX, posizioneY);
-        for (int i = 0; i < 20; i++)
-        {
-            Console.Write(" ");
-        }
-        Console.SetCursorPosition(posizioneX, posizioneY);
-    }
-
-    /*Metodo accessorio che permette di scrivere un testo a colori.
-    Scrive il contenuto di 'messaggio' nel colore scelto e reimposta
-    il colore di default alla fine. 
-    Non va a capo.
-    Utilizza l'opzione 'f' per cambiare colore del font
-    Utilizza l'opzione .b per cambiare il colore dello sfondo.
-    Colori: - rosso
-            - blu
-            - magenta
-            - verde
-
-    INPUT: string messaggio ----> il messaggio da stampare
-            string colore -------> il colore scelto
-            char opz ------------> default 'f'
-    */
-    static void ScriviAColori(string messaggio, string colore, char opz = 'f')
-    {
-        //memorizzo i colori attuali
-        var currentBackground = Console.BackgroundColor;
-        var currentForeground = Console.ForegroundColor;
-
-        switch (colore)
-        {
-            case "rosso":
-                if (opz == 'b')
-                {
-                    Console.BackgroundColor = ConsoleColor.Red;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                }
-                break;
-
-            case "blu":
-                if (opz == 'b')
-                {
-                    Console.BackgroundColor = ConsoleColor.Blue;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                }
-                break;
-
-            case "magenta":
-                if (opz == 'b')
-                {
-                    Console.BackgroundColor = ConsoleColor.Magenta;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                }
-                break;
-
-            case "verde":
-                if (opz == 'b')
-                {
-                    Console.BackgroundColor = ConsoleColor.Green;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-                break;
-
-            case "giallo":
-                if (opz == 'b')
-                {
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                }
-                break;
-
-            default:
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Errore [ScriviAColori]!!!");
-                break;
-        }
-        Console.Write(messaggio);   //stampa il messaggio a colori
-                                    //ripristino i colori 
-        Console.BackgroundColor = currentBackground;
-        Console.ForegroundColor = currentForeground;
-    }
-    #endregion
-
 }
