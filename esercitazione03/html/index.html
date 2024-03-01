@@ -1,0 +1,239 @@
+<!--6 operazioni hai nel programma:
+inserimento
+visualizzazione di tutto
+visualizzazione di un gruppo
+eliminazione di uno specifico
+eliminzaione con l'aiuto del gruppo (l'azione è la stessa della precedente, cambia solo che prima ti filtra con un gruppo a tua scelta)
+
+per unirlo, puoi sempre usare ciò che stavi facendo nella cartella del progammino, nel sitoJaSonda
+oppure provare a far diversamente
+
+
+se facessi da quel vecchio progetto, hai come sito principale un area dove si spiega brevemente cosa sono le varie classi di strumenti musicali
+mentre all'inizio c'è già anche 5 aree extra in cui poi ci mettevi già tutti gli strumenti di una categoria
+ciò però non aiutava granchè in fatto di utilità, puoi cercare solo un sottogruppo di già un filtro, col rischio di dover cercare anche in altre
+aree se magari uno non sa a che categoria appartenga x strumento
+se sei testardo in questa idea, ti proporrei di tenere in tutte le aree un modo per navigare facilmente in una pagina all'altra, se cerchi dal nome
+allora fa si che sia universale, mandandoti nella pagina dello strumento e filtrando per quello strumento
+stessa cosa per il sottogruppo
+
+ma in tutto ciò rende un pò rindondante avere ben 6 pagine quando potevi far tutto ciò in una sola pagina con una scheda che raccolga le informazioni
+ed e qui che viene la seconda proposta: una singola pagina con tutti e 3 i modi di cercare
+
+la pagina un pò mostra qualcosa random, oppure cosa è stato più venduto nell'ultimo periodo/ultime uscite, quindi ti toccherebbe aggiungere altri dati
+ma tolto questo, hai 2 altre scelte: la ricerca accade tutto sulla pagina o la ricerca è una pagina a parte per mostrare solamente i risultati della ricerca
+
+
+
+
+you decided on the former-->
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sito Per strumenti musicali</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Audiowide&family=Montserrat+Subrayada:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="script.js"></script>
+
+</head>
+
+<!--
+    Carico un font
+    <h1 id="nomeid">sas     </h1>
+
+        css #nomeid {
+            font-famili: 'nome fonte';
+        }
+-->
+
+
+<header>
+    <p>TRUMENTI SMUSICALI</p>
+    <nav>
+        <ul class="sezioni">
+            <li><a href="Aerofoni/Aerofoni.HTML">Aerofoni</a></li>
+            <li><a href="Cordofoni/Cordofoni.HTML">Cordofoni</a></li>
+            <li><a href="Membranofoni/Membranofoni.HTML">Membranofoni</a></li>
+            <li><a href="Idiofoni/Idiofoni.HTML">Idiofoni</a></li>
+            <li><a href="Misc/Miscellanea.HTML">Miscellanea</a></li>
+        </ul>
+    </nav>
+    <button onclick="mostraMenu()">Si cerca qualcosa?</button>
+</header>
+
+<!--Gotta try something, putting the animation of the menu right below the header-->
+
+
+<body>
+    <!--serve una serie di cose da mostrare...-->
+<div id="menu" style="display: none;">
+    <a>Da nome
+
+        <!--appena possibile, serve un modo per inviare un testo -->
+        <form>
+            <!--action="nome del programma da usare (magari il cs)"
+        forse devi trovare un modo di proporre più soluzioni oltre alla ricerca di occorrenze... tipo un menu a tendina per capire che vuoi fare-->
+
+            <input type="text" id="fname" name="fname" placeholder="Nome Strumento"><br>
+        </form>
+    </a>
+    <a>
+        Da Caratteristica
+
+        <!--appena possibile, serve un modo per inviare un testo -->
+        <form>
+            <!--action="nome del programma da usare (magari il cs)"
+        forse devi trovare un modo di proporre più soluzioni oltre alla ricerca di occorrenze... tipo un menu a tendina per capire che vuoi fare-->
+
+            <input type="text" id="fname" name="fname" placeholder="Caratteristica Strumento"><br>
+        </form>
+    </a>
+    <a>Da categoria
+        <form>
+            <input type="button" id="fscelta" name="fname" value="Aerofoni">
+            <input type="button" id="fscelta" name="fname" value="Cordofoni">
+            <input type="button" id="fscelta" name="fname" value="Membranofoni">
+            <input type="button" id="fscelta" name="fname" value="Idiofoni">
+            <input type="button" id="fscelta" name="fname" value="Miscellanea">
+        </form>
+    </a>
+</div>
+
+
+
+
+    <section id="aerofoni">
+        <h1><i class="fas fa-beer"></i> Aerofoni</h1>
+        <div class="kazuyamishima">
+            <div class="container">
+                <div class="sorg">
+                    <img src="https://source.unsplash.com/random/300x200?sig=&woodwind" alt="Aerofono">
+                </div>
+                <div class="text">
+                    <p>Sono gli strumenti in cui il suono viene prodotto dalla vibrazione dell'aria.<br><br>
+                        Vengono divisi in tre famiglie principali:<br>
+                        LEGNI: strumenti costruiti in legno (o che anticamente, nella loro versione originale, erano
+                        costruiti in legno)<br>
+                        OTTONI: strumenti costruiti in ottone (lega metallica formata dall'unione di rame e zinco)<br>
+                        A SERBATOIO D'ARIA: strumenti provvisti di un contenitore (serbatoio) in cui viene introdotta
+                        l'aria che poi servirà per produrre il suono.<br><br>
+                        In base al sistema di produzione del suono i legni vengono classificati nelle seguenti
+                        categorie:<br>
+                    <ul>
+                        <li> a imboccatura diretta o semplice</li>
+                        <li> a becco o a fischietto</li>
+                        <li> ad ancia semplice o ancia doppia</li>
+                        <li> a bocchino</li>
+                    </ul>
+                    Gli strumenti a imboccatura semplice (o diretta) sono costituiti da un tubo cilindrico, provvisto di
+                    fori o chiavi.<br>
+                    L'aria viene immessa nello strumento da una particolare fessura detta "imboccatura".<br>Fanno parte
+                    di questa categoria il FLAUTO TRAVERSO e l'OTTAVINO</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="cordofoni">
+        <h2><i class="fas fa-cogs"></i> Cordofoni</h2>
+        <div class="kazuyamishima">
+            <div class="container">
+                <div class="sorg">
+                    <img src="https://source.unsplash.com/random/300x200?sig=&string-instrument" alt="Cordofono">
+                </div>
+                <div class="text">
+                    <p>Sono gli strumenti in cui il suono viene prodotto dalla vibrazione di una o più corde tese. <br>
+                        Nei cordofoni l'altezza del suono è determinata da tre fattori:<br>
+                    <ul>
+                        <li>la lunghezza della corda (più la corda è lunga più il suono diventa grave, più la corda è
+                            corta e il suono diventa acuto)<br>
+                        <li>il diametro della corda (più la corda è spessa più il suono diventa grave, più la corda è
+                            sottile più il suono diventa acuto)<br>
+                        <li>la tensione della corda (più si tende una corda e più il suono diventa acuto, più la corda
+                            viene rilasciata e più il suono tende al grave).<br><br>
+                        </ul>
+                        Questa categoria si divide in 3 suttocategorie:
+                        <ul>
+                            <li>Corde strofinate (anche dette archi)<br>
+                            <li>Corde pizzicate<br>
+                            <li>Corde a percussione
+                            </ul>
+                        </p>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <section id="membranofoni">
+        <h2><i class="fas fa-plug"></i> Membranofoni</h2>
+        <div class="kazuyamishima">
+            <div class="container">
+                <div class="sorg">
+                    <img src="https://source.unsplash.com/random/300x200?sig=&percussion-instrument" alt="Membranofono">
+                </div>
+                <div class="text">
+                    <p>I membranofoni si dividono in 2 categorie: determinato ed indeterminato.<br><br>
+                        I membranofoni a suono determinato sono strumenti a percussione che producono il suono grazie
+                        alle vibrazioni di una membrana, una pelle tesa percossa con un battente, in modo che producano
+                        suoni ben definiti e precisamente identificabili. Un esempio ci è dato dai TIMPANI.<br><br>
+                        I membranofoni a suono indeterminato sono strumenti a percussione che producono il suono grazie
+                        alle vibrazioni di una membrana, una pelle tesa percossa con un battente, ma che non generano
+                        suoni ben definiti e precisamente identificabili. Un esempio ci è dato dai TAMBURI.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="idiofoni">
+        <h2><i class="fas fa-eye"></i> Idiofoni</h2>
+        <div class="kazuyamishima">
+            <div class="container">
+                <div class="sorg">
+                    <img src="https://source.unsplash.com/random/300x200?sig=&vibraphone" alt="Idiofono">
+                </div>
+                <div class="text">
+                    <p>Così come i membranofoni, anche gli idiofoni si dividono in 2 categorie: determinato ed
+                        indeterminato.<br><br>
+                        Gli strumenti idiofoni a suono determinato sono strumenti il cui corpo è in grado di produrre
+                        suoni ben definiti e precisamente identificabili, come nel caso delle CAMPANE TUBOLARI, del GLOCKENSPIEL, della CELESTA o dello XILOFONO.<br><br>
+                        Gli strumenti idiofoni a suono indeterminato sono strumenti il cui corpo è produce suoni la cui
+                        altezza sonora non è precisamente identificabile. Un esempio sono, i PIATTI, il GONG il TRIANGOLO, le «nacchere» e le MARACAS.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="misc">
+        <h2><i class="fa fa-address-book"></i> Miscellanea</h2>
+        <div class="kazuyamishima">
+            <div class="container">
+                <div class="sorg">
+                    <img src="https://source.unsplash.com/random/300x200?sig=&musical-score" alt="Misc">
+                </div>
+                <div class="text">
+                    <p>Serie di oggetti, non strumenti musicali, correlati al mondo della musica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="fine">
+        <!--
+<a href="#"> Torna su</a>
+-->
+    </div>
+</body>
+<footer>
+    <p>&copy; 2024 Nome del Progetto. Tutti i diritti riservati.</p>
+</footer>
+
+</html>

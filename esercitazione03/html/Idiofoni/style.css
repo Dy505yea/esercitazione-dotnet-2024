@@ -1,0 +1,91 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.inizio, button, #menu {
+    display: flex;
+    /*background-color: #016064;*/
+    background-image: linear-gradient(to bottom, rgb(26, 123, 136), #016064);
+    color: white;
+    font-family: "Goblin One";
+    flex-direction: column;
+    align-items: center;
+    font-size: 80px;
+}
+
+.sezioni{
+    font-family: 'Goblin One';
+    font-size:30px
+}
+
+nav ul {
+    
+    list-style-type: none;
+    padding: 20px;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+a {
+    padding: 20px;
+}
+
+a:hover{
+    background-color: #00c0a3;
+    color: black;
+}
+button {
+    font-size:40px;
+    background:local;
+    background-color: #00000025;
+    border: transparent;
+    border-radius: 30px;
+}
+header form{
+    font-size: 42px;
+}
+body {
+    background-color: #022c2e;
+}
+
+#menu {
+    font-size: 20px;
+    background-color: #022c2e;
+    display: none;
+    animation: apri 0.5s;
+    position: relative;
+    z-index: -1;
+}
+
+@keyframes apri {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+#menu a {
+    display: grid;
+    text-align: center;
+    text-justify: center;
+    padding: 10px;
+    text-decoration: none;
+    color: #000;
+    border: transparent;
+    background-color: #ffffff5d;
+}
+#menu input{
+    font-family: "Goblin One";
+}

@@ -1,0 +1,206 @@
+
+body {
+    color: aquamarine;
+    background-image: linear-gradient(to bottom, #0e3e44, #0e1717);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+button {
+    font-family: 'Audiowide';
+    font-size:25px;
+    background:local;
+    background-color: #00000025;
+    color: aquamarine;
+    border: transparent;
+    border-radius: 30px;
+}
+
+header {
+    /*background-color: #016064;*/
+    background-image: linear-gradient(to bottom, rgb(26, 123, 136), #016064);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+header p{
+    font-size: 80px;
+        font-family: "Montserrat Subrayada", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+    max-height: 60px;
+}
+
+.sezioni{
+    font-family: 'Audiowide';
+    font-size:30px
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: aquamarine;
+    text-decoration: none;
+}
+
+a {
+    padding: 20px;
+}
+
+a:hover{
+    background-color: #00c0a3;
+    color: black;
+}
+
+h1, h2 {
+    padding: 20px;
+    margin: 20px;
+}
+section {
+    background-image: linear-gradient(#24626416, #01616400);
+}
+
+footer {
+    background-color: #333333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.sezioni {
+    font-family: 'Audiowide';
+    color: aquamarine;
+}
+
+
+#provaid {
+    font-family: 'Audiowide';
+}
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start
+  }
+   
+   .sorg {
+     max-width: 100%;
+     max-height:100%;
+     margin-left: 40px;
+   }
+   .text{
+    padding-left: 30px;
+   }
+   
+
+
+
+
+@media (max-width: 1210px)
+{
+    a{
+        padding: 15px;
+    }
+    .sezioni {
+        line-height: 80px;
+    }
+}
+
+@media (max-width: 927px)
+{
+    header p {
+        max-height: 80px;
+    }
+}
+
+@media (max-width: 780px)
+{
+    a{
+        padding: 13px;
+    }
+    .sezioni {
+        line-height: 65px;
+        font-size: 25px;
+    }
+    .container{
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 570px)
+{
+    .container{
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 520px)
+{
+    a{
+        padding: 11px;
+    }
+    .sezioni {
+        line-height: 45px;
+        font-size: 18px;
+    }
+    section{
+        font-size: 15px;
+    }
+    header p{
+        font-size: 70px;
+    }
+}
+
+.fine{
+    margin-bottom: 80px;
+}
+
+
+
+#menu {
+    font-size: 20px;
+    background-color: #022c2e;
+    display: none;
+    animation: apri 0.5s;
+    position: relative;
+    z-index: -1;
+}
+
+@keyframes apri {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+#menu a {
+    display: grid;
+    text-align: center;
+    text-justify: center;
+    padding: 10px;
+    text-decoration: none;
+    color: #000;
+    border: transparent;
+    background-color: #bbfaffad;
+    font-family: "Audiowide", sans-serif;
+}
+#menu input{
+    font-family: "Audiowide", sans-serif;
+}

@@ -1,0 +1,76 @@
+<!--pagina in cui mostra un pò tutti gli strumenti targhettati come aerofoni
+
+piano. mettere il titolo aerofoni, simile al principale, con una lista sottostante degli aerofoni
+piano.. mettere un modo per ricercare dentro ad un riquadro di testo
+piano... ogni strumento è alto x, l'immagine deve stare a sinistra, il testo a destra mostrando quel che può, priorizzando le informazioni importanti
+piano.... modo per tornae al menù principale-->
+
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sito Per strumenti musicali: aerofoni</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+    <script src="script.js"></script>
+
+</head>
+
+<header>
+    <div class="inizio">
+        <p>MISCELLANEA</p>
+        <nav>
+            <ul class="sezioni">
+                <li><a href="../index.HTML">Homepage</a></li>
+                <li><a href="../Aerofoni/Aerofoni.HTML">Aerofoni</a></li>
+                <li><a href="../Cordofoni/Cordofoni.HTML">Cordofoni</a></li>
+                <li><a href="../Membranofoni/Membranofoni.HTML">Membranofoni</a></li>
+                <li><a href="../Idiofoni/Idiofoni.HTML">Idiofoni</a></li>
+            </ul>
+        </nav>
+        <button onclick="mostraMenu()">Si cerca qualcosa?</button>
+    </div>
+    
+</header>
+
+<body>
+    <!--serve una serie di cose da mostrare...-->
+<div id="menu" style="display: none;">
+    <a>Da nome
+
+        <!--appena possibile, serve un modo per inviare un testo -->
+        <form>
+            <!--action="nome del programma da usare (magari il cs)"
+        forse devi trovare un modo di proporre più soluzioni oltre alla ricerca di occorrenze... tipo un menu a tendina per capire che vuoi fare-->
+
+            <input type="text" id="fname" name="fname" placeholder="Nome Strumento"><br>
+        </form>
+    </a>
+    <a>
+        Da Caratteristica
+
+        <!--appena possibile, serve un modo per inviare un testo -->
+        <form>
+            <!--action="nome del programma da usare (magari il cs)"
+        forse devi trovare un modo di proporre più soluzioni oltre alla ricerca di occorrenze... tipo un menu a tendina per capire che vuoi fare-->
+
+            <input type="text" id="fname" name="fname" placeholder="Caratteristica Strumento"><br>
+        </form>
+    </a>
+    <a>Da categoria
+        <form>
+            <input type="button" id="fscelta" name="fname" value="Aerofoni">
+            <input type="button" id="fscelta" name="fname" value="Cordofoni">
+            <input type="button" id="fscelta" name="fname" value="Membranofoni">
+            <input type="button" id="fscelta" name="fname" value="Idiofoni">
+            <input type="button" id="fscelta" name="fname" value="Miscellanea">
+        </form>
+    </a>
+</div>
+</body>
+
+</html>
