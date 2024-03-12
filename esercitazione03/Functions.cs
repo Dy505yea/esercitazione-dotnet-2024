@@ -1,5 +1,7 @@
 using System.Data.SQLite;
 using Spectre.Console;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Function
 {
@@ -368,7 +370,8 @@ namespace Function
 
 }
 
-namespace Theory{
+namespace Theory
+{
     /*I'm just gonna use this as a sort of way to think what is the best course of action---
     So, for now the product is an instrument, with some data and connected to one of the 5 categories
     now, what we need from this db?
@@ -450,7 +453,7 @@ namespace Basedata
     class Categoria
     {
         private int id;
-        public string nome {get; set;}
+        public string nome { get; set; }
         public Categoria(string nome)
         {
             this.nome = nome;
@@ -469,3 +472,272 @@ namespace Basedata
         }
     }
 }
+
+
+
+    /*
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Database model = new Database();
+            View view = new View(model);
+            Controller control = new Controller(model, view);
+            control.MainMenu();
+        }
+    }*/
+
+    class User
+    {
+        public int Id{get; set;}
+        public string? Name {get; set;}
+        public int GetId()
+        {
+            return Id;
+        }
+    }
+
+
+
+
+
+
+
+
+    class Database : DbContext
+    {
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data Source=MyDatabase.SQLite");
+        }
+
+        public void InserisciUser(string nome)
+        {
+            var u = new User{Name=nome};
+            Users.Add(u);
+            SaveChanges();
+        }
+        public List<User> DammiUtenti()
+        {
+            var utenti= Users.ToList();
+            return utenti;
+        }
+        public void EliminaUtente(string nome)
+        {
+            foreach(var u in Users)
+            {
+                if (u.Name==nome)
+                {
+                    Users.Remove(u);
+                }
+            }
+            SaveChanges();
+        }
+        public bool ModificaUtente(string name, string target)
+        {
+            bool done=false;
+            foreach(var u in Users)
+            {
+                if(u.Name==target)
+                {
+                    u.Name=name;
+                    done=true;
+                }
+            }
+            SaveChanges();
+            return done;
+        }
+
+
+
+
+/*
+        public void AddUser(string name)
+        {
+            var command = new SQLiteCommand($"INSERT INTO users (name) VALUES ('{name}')", _connection);
+            command.ExecuteNonQuery();
+        }
+        public void DeleteUser(string name)
+        {
+            var command = new SQLiteCommand($"DELETE FROM users WHERE (name) = ('{name}')", _connection);
+            command.ExecuteNonQuery();
+        }
+        public List<string> GetUsers()
+        {
+            var command = new SQLiteCommand("SELECT name FROM users", _connection);
+            var reader = command.ExecuteReader();
+            var users = new List<string>();
+            while (reader.Read())
+            {
+                users.Add(reader.GetString(0));
+            }
+            return users;
+        }
+        public void UpdateUser(string name, string target)
+        {
+            var command = new SQLiteCommand($"UPDATE users SET (name) = ('{name}') WHERE (name) = ('{target}')", _connection);
+            command.ExecuteNonQuery();
+        }*/
+    }
+    class View
+    {
+        private Database _db;
+        public View(Database db)
+        {
+            _db = db;
+        }
+        public void ShowMainMenu()
+        {
+            Console.WriteLine("1. Aggiungi user");
+            Console.WriteLine("2. Leggi user");
+            Console.WriteLine("3. Aggiorna user");
+            Console.WriteLine("4. Elimina user");
+            Console.WriteLine("5. Esci");
+        }
+        public void ShowUsers(List<User> users)
+        {
+            foreach (var user in users)
+            {
+                Console.WriteLine($"Nome dell'utente {user.Name} ed il suo id {user.Id}");
+            }
+        }
+        public string GetInput()
+        {
+            return Console.ReadLine()!;
+        }
+    }
+    class Controller
+    {
+        private Database _db;
+        private View _view;
+        public Controller(Database db, View view)
+        {
+            _db = db;
+            _view = view;
+        }
+        public void MainMenu()
+        {
+            while (true)
+            {
+                _view.ShowMainMenu();
+                var input = _view.GetInput();
+                if (input == "1")
+                {
+                    AddUser();
+                }
+                else if (input == "2")
+                {
+                    ShowUser();
+                }
+                else if (input == "3")
+                {
+                    UpdateUser();
+                }
+                else if (input == "4")
+                {
+                    DeleteUser();
+                }
+                else if (input == "5")
+                {
+                    break;
+                }
+            }
+        }
+        private void AddUser()
+        {
+            Console.WriteLine("Enter user name:");
+            var name = _view.GetInput();
+            _db.InserisciUser(name);
+        }
+        private void ShowUser()
+        {
+            var users = _db.DammiUtenti();
+            _view.ShowUsers(users);
+        }
+        private void DeleteUser()
+        {
+            var users = _db.DammiUtenti();
+            _view.ShowUsers(users);
+            Console.WriteLine("\nEnter user to delete:");
+            var name = _view.GetInput();
+            _db.EliminaUtente(name);
+        }
+        private void UpdateUser()
+        {
+            var users = _db.DammiUtenti();
+            _view.ShowUsers(users);
+            Console.WriteLine("\nEnter user to modify:");
+            var target = _view.GetInput();
+            Console.WriteLine("\nEnter new name:");
+            var name = _view.GetInput();
+            if(_db.ModificaUtente(name, target))
+            {
+                Console.WriteLine("Update done");
+                users = _db.DammiUtenti();
+                _view.ShowUsers(users);
+            }
+            else
+                Console.WriteLine("Couldn't find user");
+        }
+
+        /*
+        personal application for database :/
+
+        use everything you shuold have learned so far
+
+        3 tables for database
+        possibly in best way
+
+        one table takes from 2
+        products - clients - orders(?)
+
+        scheme video console genre
+
+        entity framework
+        with a personal provider
+        you have to use the mvc bulls
+        all classes needs to be documented with triple slash
+
+        remarks, tag and code as example are bonus
+        */
+
+        /*
+        look one by one the pages remind me you'll always be a villain
+        for you the angels have fallen and now they're gone
+        see now they're gone
+        Forever gone from the hell that sourced as my one and only home
+        though it may hurt today, tomorrow I'll be heading my way
+
+        I tried... I tried... what did we expect
+        My dearest friend
+        tell me when
+        we should make it end
+
+        So let me move your hips
+        like one of those madmen
+            tap tippity tappity tap
+        Dance our last dance
+        Say     La laliledalilela
+                Laliledalilelu
+        Spinning vinyl opera
+        longing for this moment
+        brewing all this hatred
+        so that i had a reason
+        a reason to see you dead
+
+        Do n't you  worry
+        I saved a spot for you in the recycle bin
+
+        Stop now one by one your desires convinced me you've always been human
+        for you the shelves have fallen and now they're gone
+        see now they're gone
+        Forever gone from the stage that allowed us our one and only dreams
+        
+        What's more to say
+        pain catches up to those who chooses to stay
+        though it may hurt today, tomorrow I'll be heading my way
+        */
+
+    }

@@ -1,9 +1,16 @@
-﻿class Program
+﻿
+
+class Program
 {
     static void Main(string[] args)
     {
-        using (var db = new Database())
+            Database model = new Database();
+            View view = new View(model);
+            Controller control = new Controller(model, view);
+        using (model)
         {
+            control.MainMenu();
+            /*
             Random ran= new Random();
             var clienti= new List<Cliente>
             {
@@ -31,6 +38,7 @@
             Console.WriteLine();
             db.InserisciProdotti(prodi);
             db.StampaProdotti();
+            */
         }
     }
 

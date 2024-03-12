@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-
+/*
 class Cliente
 {
     public string? nome { get; set; }
@@ -61,5 +61,5 @@ class Database : DbContext
             Console.WriteLine($"{p.id} - {p.nome} - {p.prezzo} - {p.Cliente!.nome} {p.Cliente.cognome}");
         }
     }
-}
+}*/
 

@@ -15,62 +15,18 @@ namespace esercitazione03.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
-            modelBuilder.Entity("Cliente", b =>
+            modelBuilder.Entity("User", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("cognome")
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("nome")
-                        .HasColumnType("TEXT");
+                    b.HasKey("Id");
 
-                    b.Property<string>("telefono")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Clienti");
-                });
-
-            modelBuilder.Entity("Prodotto", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("clienteId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("nome")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("prezzo")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("clienteId");
-
-                    b.ToTable("Prodotti");
-                });
-
-            modelBuilder.Entity("Prodotto", b =>
-                {
-                    b.HasOne("Cliente", "Cliente")
-                        .WithMany("Prodotti")
-                        .HasForeignKey("clienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("Cliente", b =>
-                {
-                    b.Navigation("Prodotti");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
