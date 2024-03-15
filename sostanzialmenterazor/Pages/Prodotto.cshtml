@@ -1,0 +1,74 @@
+@page
+@model ProdottoModel
+@{
+    ViewData["Title"] = "Dettaglio Prodotto";
+    var nome=Model.Prodotto!.Nome;
+    var veroNome=nameof(Model.Prodotto.Nome);
+    var prezzo=Model.Prodotto.Prezzo;
+    var veroPrezzo=nameof(Model.Prodotto.Prezzo);
+    var desc=Model.Prodotto.Descrizione;
+    var veraDesc=nameof(Model.Prodotto.Descrizione);
+}
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @veroNome
+            </th>
+            <th>
+                @veroPrezzo
+            </th>
+            <th>
+                @veraDesc
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @nome
+            </td>
+            <td>
+                @prezzo
+            </td>
+            <td>
+                @desc
+            </td>
+        </tr>
+    </tbody>
+</table>
+<a asp-page="Prodotti"> Torna a Prodotti </a>
+<!--
+page
+model ProdottiModel
+-->
+<!--
+    find a way to get from input button what kind of product the user wants
+    afterwards, you need to search the product by input, it should always be correct
+    then, show the image in big of the product, name big but not too much, price relative smaller than the name
+    and the description normal, possibly a way to go back to the menu of products
+-->
+
+<!--
+@{
+    ViewData["Title"] = "Prodotto";
+}
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Prezio</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+<p>Pagina prodotto</p>
+
+-->
