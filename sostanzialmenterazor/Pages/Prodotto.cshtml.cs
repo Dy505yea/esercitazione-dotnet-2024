@@ -1,21 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
-namespace sostanzialmenterazor.Pages;
-
-public class ProdottoModel : PageModel
+namespace sostanzialmenterazor.Pages
 {
-    public Prodotti? Prodotto { get; set; }
-    private readonly ILogger<ProdottoModel>? _logger;
-    public ProdottoModel(ILogger<ProdottoModel> logger)
+    public class ProdottoModel : PageModel
     {
-        _logger = logger;
-    }
-
-    public void OnGet(string nome, string dettaglio, decimal prezzo)
-    {
-        Prodotto = new Prodotti{ Nome = nome, Prezzo = prezzo, Descrizione = dettaglio};
-        //log per possibili debug in caso di necessità
-        _logger!.LogInformation("Stai guardando dei dettagli del prodotto scelto");
+        public Prodotti? Prodotto { get; set; }
+        public void OnGet(string nome)
+        {
+            var json = System.IO.File.ReadAllText("wwwroot/json/prodotti.json");
+            var prodotti = JsonConvert.DeserializeObject<List<Prodotti>>(json);
+            Prodotto = prodotti!.FirstOrDefault(p => p.Nome == nome);
+                /*
+                si crea p
+                i prodotti sono presi da json, deserializzati
+                da stringa a oggetto (o meglio, in lista di oggetti)
+                p diviene il primo oggetto con il nome ricercato in lambda
+                prodotto prende quell'oggetto
+                */
+        }
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Nv01i3tJZ4dsXURbIT8KQa/g3rQMYOqOUZhP1Fy0RwY=",
+  "Hash": "jqvWD8ia4cfjeFkERKN18yK5fmDQW1BQeZx75gOSZ6Y=",
   "Source": "sostanzialmenterazor",
   "BasePath": "_content/sostanzialmenterazor",
   "Mode": "Default",
@@ -110,6 +110,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "C:\\Users\\DOTNET\\Documents\\Corso-Dotnet-2024\\esercitazione-dotnet-2024\\sostanzialmenterazor\\wwwroot\\json\\prodotti.json",
+      "SourceId": "sostanzialmenterazor",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\DOTNET\\Documents\\Corso-Dotnet-2024\\esercitazione-dotnet-2024\\sostanzialmenterazor\\wwwroot\\",
+      "BasePath": "_content/sostanzialmenterazor",
+      "RelativePath": "json/prodotti.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\json\\prodotti.json"
     },
     {
       "Identity": "C:\\Users\\DOTNET\\Documents\\Corso-Dotnet-2024\\esercitazione-dotnet-2024\\sostanzialmenterazor\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",

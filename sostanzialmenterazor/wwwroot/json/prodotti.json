@@ -1,0 +1,68 @@
+[
+    {
+        "Nome": "Prodotto 1",
+        "Prezzo": 100,
+        "Descrizione": "Descrizione 1",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=1&web"
+    },
+    {
+        "Nome": "Prodotto 2",
+        "Prezzo": 200,
+        "Descrizione": "Descrizione 2",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=2&web"
+    },
+    {
+        "Nome": "Prodotto 3",
+        "Prezzo": 300,
+        "Descrizione": "Descrizione 3",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=3&web"
+    },
+    {
+        "Nome": "Prodotto 4",
+        "Prezzo": 400,
+        "Descrizione": "Descrizione 4",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=4&web"
+    },
+    {
+        "Nome": "Prodotto 5",
+        "Prezzo": 500,
+        "Descrizione": "Descrizione 5",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=5&web"
+    },
+    {
+        "Nome": "Prodotto 6",
+        "Prezzo": 600,
+        "Descrizione": "Descrizione 6",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=6&web"
+    },
+    {
+        "Nome": "Prodotto 7",
+        "Prezzo": 700,
+        "Descrizione": "Descrizione 7",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=7&web"
+    },
+    {
+        "Nome": "Prodotto 8",
+        "Prezzo": 800,
+        "Descrizione": "Descrizione 8",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=8&web"
+    },
+    {
+        "Nome": "Prodotto 9",
+        "Prezzo": 900,
+        "Descrizione": "Descrizione 9",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=9&web"
+    },
+    {
+        "Nome": "Prodotto 10",
+        "Prezzo": 1000,
+        "Descrizione": "Descrizione 10",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=10&web"
+    },
+    {
+        "Nome": "Prodotto 11",
+        "Prezzo": 1100,
+        "Descrizione": "Descrizione 11",
+        "Immagine": "https://source.unsplash.com/random/300x200?sig=11&web"
+    }
+]

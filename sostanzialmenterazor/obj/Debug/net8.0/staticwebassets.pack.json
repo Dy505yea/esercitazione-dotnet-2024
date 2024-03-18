@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
+      "Id": "C:\\Users\\DOTNET\\Documents\\Corso-Dotnet-2024\\esercitazione-dotnet-2024\\sostanzialmenterazor\\wwwroot\\json\\prodotti.json",
+      "PackagePath": "staticwebassets\\json\\prodotti.json"
+    },
+    {
       "Id": "C:\\Users\\DOTNET\\Documents\\Corso-Dotnet-2024\\esercitazione-dotnet-2024\\sostanzialmenterazor\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },

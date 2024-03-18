@@ -1,0 +1,15 @@
+@page
+@model ViewModel
+@{
+    ViewData["Title"] = "Persona";
+}
+<h1>@ViewData["Title"]</h1>
+
+<table>
+        @foreach(Persona persona in Model.Persone)
+        {
+            <p>@persona.Nome e @persona.Cognome</p>
+        }
+</table>
+
+<p>Use this page to detail your site's privacy policy.</p>
