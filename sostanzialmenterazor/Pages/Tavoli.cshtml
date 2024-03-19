@@ -1,0 +1,21 @@
+@page
+@model TavoloModel
+@{
+    ViewData["Title"] = "Tavoli";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+@foreach (var tavolo in Model.Tavoli)
+{
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@tavolo.Nome</h5>
+                    <p class="card-text">@tavolo.Lunghezza x @tavolo.Larghezza x @tavolo.Altezza, @tavolo.Colore</p>
+                    <a asp-page="TavoloDettaglio" asp-route-id="@tavolo.Id" class="btn btn-primary">Dettaglio</a>
+                </div>
+            </div>
+        </div>
+}
+</div>

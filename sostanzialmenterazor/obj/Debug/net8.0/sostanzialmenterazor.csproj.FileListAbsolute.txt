@@ -33,3 +33,4 @@ C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\sostanzial
 C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\sostanzialmenterazor\obj\Debug\net8.0\sostanzialmenterazor.csproj.AssemblyReference.cache
 C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\sostanzialmenterazor\obj\Debug\net8.0\sostanzialmenterazor.csproj.CopyComplete
 C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\sostanzialmenterazor\bin\Debug\net8.0\Pages\DylannZambrano.json
+C:\Users\DOTNET\Documents\Corso-Dotnet-2024\esercitazione-dotnet-2024\sostanzialmenterazor\bin\Debug\net8.0\Pages\Tavoli.json

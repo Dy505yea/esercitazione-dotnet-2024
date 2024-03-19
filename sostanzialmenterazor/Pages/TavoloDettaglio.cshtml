@@ -1,0 +1,49 @@
+@page
+@model TavoloDettaglioModel
+@{
+    ViewData["Title"] = Model.Tavolo.Nome;
+}
+<h1>@ViewData["Title"]</h1>
+
+
+<img src="https://source.unsplash.com/random/300x200?sig=1&table" alt="Immagine 1">
+
+<table class="table" style="width: fit-content;">
+    <thead>
+        <tr>
+            <th>
+                Materiale
+            </th>
+            <th>
+                Misure (lunghezza, larghezza, altezza)
+            </th>
+            <th>
+                Colore
+            </th>
+            <th>
+                Prezzo
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Model.Tavolo.Materiale
+            </td>
+            <td>
+                @Model.Tavolo.Lunghezza cm x @Model.Tavolo.Larghezza cm x @Model.Tavolo.Altezza cm
+            </td>
+            <td>
+                @Model.Tavolo.Colore
+            </td>
+            <td>
+                @{
+                    string prezzo=Model.Tavolo.Prezzo.ToString();
+                    prezzo= prezzo.Replace('.', ',');
+                }
+                @prezzo
+            </td>
+        </tr>
+    </tbody>
+</table>
+<a asp-page="Tavoli"> Torna alla lista dei tavoli </a>

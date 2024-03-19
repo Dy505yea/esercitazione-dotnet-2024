@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "nome": "Tavolo Lima",
+        "materiale": "Acciao",
+        "colore": "Bianco",
+        "lunghezza": 40,
+        "larghezza": 16,
+        "altezza": 50,
+        "prezzo": 129.99
+    },
+    {
+        "id": 3,
+        "nome": "Tavolo Capri Bianco",
+        "materiale": "Legno",
+        "colore": "Acacia",
+        "lunghezza": 80,
+        "larghezza": 39,
+        "altezza": 41,
+        "prezzo": 163.99
+    },
+    {
+        "id": 2,
+        "nome": "Tavolo Dogh",
+        "materiale": "Acciao",
+        "colore": "Beige",
+        "lunghezza": 75,
+        "larghezza": 75,
+        "altezza": 74,
+        "prezzo": 91.99
+    }
+]
